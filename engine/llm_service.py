@@ -33,6 +33,21 @@ class OpenAIService(LLMService):
     def generate_response(self, prompt: str, **kwargs) -> str:
         """Generate a response using OpenAI's API."""
         try:
+            # Test API key permissions first
+            try:
+                self.client.models.list()
+            except Exception as e:
+                if "insufficient permissions" in str(e).lower():
+                    logger.error("""
+                    OpenAI API key has insufficient permissions. Please:
+                    1. Go to https://platform.openai.com/api-keys
+                    2. Create a new API key with the following scopes:
+                       - model.request
+                       - completion.request
+                    3. Update your API key in the environment variables
+                    """)
+                raise
+            
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],

@@ -24,11 +24,6 @@ def load_config():
 config = load_config()
 standards_loader = StandardsLoader()
 prompt_manager = PromptManager(standards_loader)
-llm_service = get_llm_service(
-    provider=config["llm"]["provider"],
-    model=config["llm"]["model"],
-    temperature=config["llm"]["temperature"]
-)
 
 # Set up Streamlit page
 st.set_page_config(
@@ -65,6 +60,27 @@ with st.form("company_info_form"):
     )
     
     st.subheader("Analysis Parameters")
+    
+    # Model selection
+    model_provider = st.selectbox(
+        "Select LLM Provider",
+        ["OpenAI", "Anthropic"],
+        index=0
+    )
+    
+    if model_provider == "OpenAI":
+        model_name = st.selectbox(
+            "Select OpenAI Model",
+            ["gpt-4-turbo-preview", "gpt-4", "gpt-3.5-turbo"],
+            index=0
+        )
+    else:  # Anthropic
+        model_name = st.selectbox(
+            "Select Anthropic Model",
+            ["claude-3-opus-20240229", "claude-3-sonnet-20240229", "claude-3-haiku-20240307"],
+            index=0
+        )
+    
     frameworks = st.multiselect(
         "Select ESG Frameworks",
         ["ifc", "2x", "internal"],
@@ -88,6 +104,13 @@ if submitted:
     else:
         try:
             with st.spinner("Generating analysis..."):
+                # Initialize LLM service with selected model
+                llm_service = get_llm_service(
+                    provider=model_provider.lower(),
+                    model=model_name,
+                    temperature=config["llm"]["temperature"]
+                )
+                
                 # Prepare company info
                 company_info = {
                     "name": company_name,

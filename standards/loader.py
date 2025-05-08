@@ -39,11 +39,16 @@ class StandardsLoader:
             return self._standards_cache[framework]
             
         try:
-            yaml_path = self.standards_dir / framework / f"{framework}-criteria.yaml"
-            md_path = self.standards_dir / framework / f"{framework}-standards.md"
+            framework_dir = self.standards_dir / framework
+            yaml_path = framework_dir / f"{framework.upper()}-criteria.yaml"
+            md_path = framework_dir / f"{framework.upper()}-standards.md"
+            
+            logger.info(f"Loading framework {framework} from {yaml_path} and {md_path}")
             
             if not yaml_path.exists() or not md_path.exists():
                 logger.error(f"Missing files for framework {framework}")
+                logger.error(f"YAML path exists: {yaml_path.exists()}")
+                logger.error(f"MD path exists: {md_path.exists()}")
                 return None
                 
             with open(yaml_path, 'r', encoding='utf-8') as f:
