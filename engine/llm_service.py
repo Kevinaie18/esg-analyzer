@@ -9,6 +9,7 @@ import requests
 from loguru import logger
 from tenacity import retry, stop_after_attempt, wait_exponential
 from functools import lru_cache
+import re
 
 class LLMService(ABC):
     """Abstract base class for LLM services."""
@@ -123,7 +124,10 @@ class DeepSeekService(LLMService):
             )
             response.raise_for_status()
             
-            return response.json()["choices"][0]["message"]["content"]
+            content = response.json()["choices"][0]["message"]["content"]
+            # Remove 'Reasoning:' or similar sections
+            content = re.split(r'\n?Reasoning:?\n?', content, flags=re.IGNORECASE)[0].strip()
+            return content
         except Exception as e:
             logger.error(f"Error generating response from DeepSeek: {str(e)}")
             raise
