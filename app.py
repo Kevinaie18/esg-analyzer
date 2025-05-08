@@ -9,9 +9,17 @@ from dotenv import load_dotenv
 from loguru import logger
 import re
 
-from standards.loader import StandardsLoader
-from prompts.enhanced_prompts import EnhancedPromptManager
-from engine.llm_service import get_llm_service
+def reorder_sections(markdown_text: str) -> str:
+    """Reorder sections in markdown output by their numbered headers (## N. ...)."""
+    # Find all section headers and their content
+    pattern = re.compile(r'(##\s*(\d+)\..*?)(?=\n##\s*\d+\.|\Z)', re.DOTALL)
+    sections = pattern.findall(markdown_text)
+    if not sections:
+        return markdown_text  # fallback if no matches
+    # Sort sections by their number
+    sorted_sections = sorted(sections, key=lambda x: int(x[1]))
+    # Reconstruct the markdown
+    return '\n\n'.join([s[0].strip() for s in sorted_sections])
 
 # Load environment variables
 load_dotenv()
@@ -153,16 +161,4 @@ if submitted:
                 )
         except Exception as e:
             logger.error(f"Error generating analysis: {str(e)}")
-            st.error("An error occurred while generating the analysis. Please try again.")
-
-def reorder_sections(markdown_text: str) -> str:
-    """Reorder sections in markdown output by their numbered headers (## N. ...)."""
-    # Find all section headers and their content
-    pattern = re.compile(r'(##\s*(\d+)\..*?)(?=\n##\s*\d+\.|\Z)', re.DOTALL)
-    sections = pattern.findall(markdown_text)
-    if not sections:
-        return markdown_text  # fallback if no matches
-    # Sort sections by their number
-    sorted_sections = sorted(sections, key=lambda x: int(x[1]))
-    # Reconstruct the markdown
-    return '\n\n'.join([s[0].strip() for s in sorted_sections]) 
+            st.error("An error occurred while generating the analysis. Please try again.") 
