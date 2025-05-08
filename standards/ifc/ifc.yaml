@@ -1,0 +1,10 @@
+name: "IFC Performance Standards"
+version: "2012"
+criteria:
+  - id: "IFC-PS1-005"
+    title: "Environmental and Social Management System (ESMS)"
+    pillar: "G"
+    section: "Environmental and Social Assessment and Management System"
+    keywords: ["ESMS", "management", "risks", "impacts", "policy", "assessment", "programs", "capacity"]
+    priority: "critical"
+    description: "Fundamental element for managing E&S risks, structured in 7 components" 

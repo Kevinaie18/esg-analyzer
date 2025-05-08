@@ -1,0 +1,10 @@
+name: "2X Global Standards"
+version: "2023"
+criteria:
+  - id: "2X-001"
+    title: "Gender Lens Investment"
+    pillar: "S"
+    section: "Investment Strategy"
+    keywords: ["gender", "investment", "strategy", "inclusion"]
+    priority: "critical"
+    description: "Integration of gender considerations into investment decision-making" 

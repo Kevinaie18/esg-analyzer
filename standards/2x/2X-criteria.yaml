@@ -1,11 +1,27 @@
-- id: 2X-BasicESG-01
-  pilier: Basic 2X ESG
-  titre: Évaluation ESG fondamentale
-  paragraphe: 1
-  section: Vue d'ensemble
-  mots_cles: [ESG, environnement, social, standards, GBVH, alignement]
-  priorité: critique
-  note: Évaluation des normes environnementales et sociales fondamentales
+name: "2X Global Standards"
+version: "2023"
+criteria:
+  - id: "2X-001"
+    title: "Gender Lens Investment"
+    pillar: "S"
+    section: "Investment Strategy"
+    keywords: ["gender", "investment", "strategy", "inclusion"]
+    priority: "critical"
+    description: "Integration of gender considerations into investment decision-making"
+  - id: "2X-BasicESG-01"
+    title: "Basic ESG Assessment"
+    pillar: "G"
+    section: "Overview"
+    keywords: ["ESG", "environment", "social", "standards", "GBVH", "alignment"]
+    priority: "critical"
+    description: "Assessment of fundamental environmental and social standards"
+  - id: "2X-Leadership-01"
+    title: "Women in Senior Management"
+    pillar: "S"
+    section: "Leadership"
+    keywords: ["leadership", "senior", "management", "C-suite"]
+    priority: "high"
+    description: "Share of women in senior management positions"
 
 - id: 2X-BasicESG-02
   pilier: Basic 2X ESG
@@ -87,15 +103,6 @@
   mots_cles: [fondatrice, fondation, entrepreneure, création]
   priorité: critique
   note: Entreprise fondée par une femme ou groupe de femmes (50%)
-
-- id: 2X-Leadership-01
-  pilier: Leadership
-  titre: Femmes dans la direction générale
-  paragraphe: 1
-  section: Direction
-  mots_cles: [direction, senior, management, C-suite]
-  priorité: élevée
-  note: Part de femmes dans la direction générale (seuil variable)
 
 - id: 2X-Leadership-02
   pilier: Leadership

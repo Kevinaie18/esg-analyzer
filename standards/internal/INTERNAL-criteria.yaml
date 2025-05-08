@@ -1,0 +1,10 @@
+name: "Internal ESG Standards"
+version: "2024"
+criteria:
+  - id: "INT-001"
+    title: "ESG Integration"
+    pillar: "Governance"
+    section: "Investment Process"
+    keywords: ["esg", "integration", "process", "analysis"]
+    priority: "critical"
+    description: "Systematic integration of ESG factors into investment analysis and decision-making" 

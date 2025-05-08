@@ -40,7 +40,7 @@ class StandardsLoader:
             
         try:
             framework_dir = self.standards_dir / framework
-            yaml_path = framework_dir / f"{framework.upper()}-criteria.yaml"
+            yaml_path = framework_dir / f"{framework.lower()}.yaml"
             md_path = framework_dir / f"{framework.upper()}-standards.md"
             
             logger.info(f"Loading framework {framework} from {yaml_path} and {md_path}")

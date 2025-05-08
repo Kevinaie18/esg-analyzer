@@ -1,0 +1,10 @@
+name: "Test Standard"
+version: "1.0"
+criteria:
+  - id: "TEST-001"
+    title: "Test Criterion"
+    pillar: "G"
+    section: "Test Section"
+    keywords: ["test", "example"]
+    priority: "critical"
+    description: "Test description" 
