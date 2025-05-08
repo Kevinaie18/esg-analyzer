@@ -41,40 +41,7 @@ st.markdown("""
 - **Mettez en avant vos priorités business et ESG** pour un rapport sur-mesure.
 - **Choisissez le modèle LLM** selon la profondeur d'analyse souhaitée:
 
-### Modèles disponibles
-- **GPT-4 Turbo**: Analyse stratégique, contexte complexe.
-- **GPT-3.5 Turbo**: Synthèse rapide, rapports courts.
-- **Claude 3 Opus/Sonnet/Haiku**: Bon équilibre rapidité/qualité.
-- **DeepSeek**: Réponses factuelles, screening rapide.
-
 ---
-
-## 🧠 Capacités des modèles disponibles
-
-### OpenAI
-- **gpt-4-turbo-preview**  
-  Analyse approfondie, recommandations stratégiques, très bonne adaptation au contexte complexe.
-- **gpt-4**  
-  Analyse détaillée, bon compromis entre profondeur et rapidité.
-- **gpt-3.5-turbo**  
-  Synthèse rapide, réponses claires, adapté aux analyses standards et aux rapports courts.
-
-### Anthropic
-- **claude-3-opus-20240229**  
-  Excellente compréhension des enjeux complexes, nuances fines, idéal pour les dossiers à fort enjeu.
-- **claude-3-sonnet-20240229**  
-  Bon équilibre entre rapidité et qualité, adapté aux analyses ESG courantes.
-- **claude-3-haiku-20240307**  
-  Très rapide, efficace pour les screenings et synthèses opérationnelles.
-
-### DeepSeek (via Fireworks)
-- **accounts/fireworks/models/deepseek-r1-basic**  
-  Réponses concises, factuelles, très rapide pour les screenings et les synthèses opérationnelles.
-
----
-
-**Choisissez le modèle selon la profondeur d'analyse souhaitée et le temps disponible.**  
-**Plus vos réponses initiales sont précises, plus le rapport généré sera utile et actionnable.**
 """)
 
 # LLM provider and model selection OUTSIDE the form for dynamic updates
