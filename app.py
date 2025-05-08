@@ -39,7 +39,12 @@ st.markdown("""
 
 - **Soyez précis et concis** dans vos réponses au pré-questionnaire.
 - **Mettez en avant vos priorités business et ESG** pour un rapport sur-mesure.
-- **Choisissez le modèle LLM** selon la profondeur d'analyse souhaitée:
+- **Choisissez le modèle LLM** selon la profondeur d'analyse souhaitée :
+
+  - **GPT-4 Turbo** : Analyse stratégique, contexte complexe.
+  - **GPT-3.5 Turbo** : Synthèse rapide, rapports courts.
+  - **Claude 3 Opus/Sonnet/Haiku** : Bon équilibre rapidité/qualité.
+  - **DeepSeek** : Réponses factuelles, screening rapide.
 
 ---
 """)
