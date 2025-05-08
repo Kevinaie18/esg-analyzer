@@ -11,6 +11,32 @@ from standards.loader import StandardsLoader, StandardCriterion
 SECTOR_PROMPT_BLOCKS = {
     "Agribusiness": """
 ### SECTOR-SPECIFIC FOCUS: AGRIBUSINESS
+
+INDUSTRY BEST PRACTICES:
+- Water Management:
+  * Efficient irrigation systems
+  * Water recycling programs
+  * Rainwater harvesting
+  * Water usage monitoring
+  * Drought-resistant crops
+- Soil Conservation:
+  * Crop rotation practices
+  * Organic farming methods
+  * Regular soil testing
+  * Erosion control measures
+  * Sustainable land management
+- Labor Standards:
+  * Fair wages and working conditions
+  * Training programs
+  * Health and safety protocols
+  * Worker housing standards
+  * Child labor prevention
+- Supply Chain:
+  * Traceability systems
+  * Smallholder inclusion
+  * Fair trade practices
+  * Local sourcing
+  * Quality control
 - Pay special attention to land use, biodiversity, water management, supply chain traceability, and labor rights in rural areas.
 - Highlight SDGs 2, 12, 15, and relevant IFC PS6, PS1, and local agricultural standards.
 - Identify risks related to deforestation, pesticide use, and smallholder inclusion.
@@ -142,7 +168,22 @@ GOVERNANCE (G):
 - Score the company against the 2X Challenge criteria (0-2 scale: 0=not met, 1=partially met, 2=fully met).
 - For each criterion, provide a brief justification.
 
-## 6. SUMMARY DASHBOARD
+## 6. STAKEHOLDER ENGAGEMENT ANALYSIS
+- Map key stakeholders and their influence:
+  * Internal: Management, Employees, Board
+  * External: Customers, Suppliers, Community, Regulators
+- For each stakeholder group:
+  * Current engagement level (High/Medium/Low)
+  * Key concerns and expectations
+  * Potential risks and opportunities
+- Initial engagement recommendations:
+  * Priority stakeholders for immediate engagement
+  * Key topics to address
+  * Suggested engagement methods
+  * Timeline for engagement
+  * Success metrics
+
+## 7. SUMMARY DASHBOARD
 - Create a summary table showing:
   - SDGs addressed (with icons/numbers)
   - Relevant IFC standards
