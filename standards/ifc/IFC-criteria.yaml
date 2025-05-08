@@ -1,0 +1,618 @@
+# Performance Standard 1: Assessment and Management of Environmental and Social Risks and Impacts
+
+- id: IFC-PS1-005
+  pilier: Gouvernance
+  titre: Système de gestion environnementale et sociale (SGES)
+  paragraphe: 5
+  section: Environmental and Social Assessment and Management System
+  mots_cles: [SGES, gestion, risques, impacts, politique, évaluation, programmes, capacité]
+  priorité: critique
+  note: Élément fondamental pour la gestion des risques E&S, structuré en 7 composantes
+
+- id: IFC-PS1-007
+  pilier: Gouvernance
+  titre: Identification des risques et impacts environnementaux et sociaux
+  paragraphe: 7
+  section: Identification of Risks and Impacts
+  mots_cles: [identification, évaluation, risques, impacts, données de référence, BPII]
+  priorité: élevée
+  note: Établit le processus d'identification des risques E&S et définit la portée requise
+
+- id: IFC-PS1-013
+  pilier: Gouvernance
+  titre: Programmes de gestion
+  paragraphe: 13
+  section: Management Programs
+  mots_cles: [atténuation, amélioration, programmes, politique, objectifs]
+  priorité: élevée
+  note: Exige des programmes structurés pour gérer les risques et impacts identifiés
+
+- id: IFC-PS1-014
+  pilier: Environnement
+  titre: Hiérarchie d'atténuation
+  paragraphe: 14
+  section: Management Programs
+  mots_cles: [évitement, minimisation, compensation, hiérarchie, atténuation]
+  priorité: critique
+  note: Principe fondamental pour la gestion de tous les impacts E&S
+
+- id: IFC-PS1-017
+  pilier: Gouvernance
+  titre: Capacité organisationnelle et compétence
+  paragraphe: 17
+  section: Organizational Capacity and Competency
+  mots_cles: [structure organisationnelle, capacité, responsabilité, ressources]
+  priorité: moyenne
+  note: Exige des ressources adéquates et une structure claire pour la gestion E&S
+
+- id: IFC-PS1-020
+  pilier: Gouvernance
+  titre: Préparation et réponse aux situations d'urgence
+  paragraphe: 20
+  section: Emergency Preparedness and Response
+  mots_cles: [urgence, préparation, intervention, accidents, collaboration]
+  priorité: élevée
+  note: Planification de la gestion des situations d'urgence et des accidents
+
+- id: IFC-PS1-022
+  pilier: Gouvernance
+  titre: Suivi et évaluation
+  paragraphe: 22
+  section: Monitoring and Review
+  mots_cles: [suivi, mesure, efficacité, conformité, performance]
+  priorité: élevée
+  note: Établit les exigences pour le suivi et la mesure de l'efficacité du SGES
+
+- id: IFC-PS1-025
+  pilier: Social
+  titre: Engagement des parties prenantes
+  paragraphe: 25
+  section: Stakeholder Engagement
+  mots_cles: [parties prenantes, engagement, consultation, divulgation, participation]
+  priorité: critique
+  note: Fondement des relations avec les communautés et autres parties prenantes
+
+- id: IFC-PS1-029
+  pilier: Social
+  titre: Divulgation d'information
+  paragraphe: 29
+  section: Disclosure of Information
+  mots_cles: [divulgation, transparence, information, communautés affectées]
+  priorité: élevée
+  note: Exigence de transparence sur les informations pertinentes du projet
+
+- id: IFC-PS1-030
+  pilier: Social
+  titre: Consultation
+  paragraphe: 30
+  section: Consultation
+  mots_cles: [consultation, participation, communautés affectées, opinions, dialogue]
+  priorité: critique
+  note: Processus de consultation participative avec les communautés affectées
+
+- id: IFC-PS1-035
+  pilier: Social
+  titre: Mécanisme de règlement des griefs pour les communautés affectées
+  paragraphe: 35
+  section: Grievance Mechanism for Affected Communities
+  mots_cles: [griefs, plaintes, mécanisme, résolution, communautés]
+  priorité: critique
+  note: Exige un mécanisme accessible et transparent pour traiter les préoccupations
+
+# Performance Standard 2: Labor and Working Conditions
+
+- id: IFC-PS2-008
+  pilier: Social
+  titre: Politiques et procédures de ressources humaines
+  paragraphe: 8
+  section: Human Resources Policies and Procedures
+  mots_cles: [RH, politique, procédures, travailleurs, droits]
+  priorité: élevée
+  note: Fondement des relations professionnelles et de la gestion du travail
+
+- id: IFC-PS2-009
+  pilier: Social
+  titre: Information aux travailleurs sur leurs droits
+  paragraphe: 9
+  section: Human Resources Policies and Procedures
+  mots_cles: [information, droits, travailleurs, transparence, documentation]
+  priorité: élevée
+  note: Obligation d'informer les travailleurs de leurs droits de façon claire
+
+- id: IFC-PS2-013
+  pilier: Social
+  titre: Organisations de travailleurs
+  paragraphe: 13
+  section: Workers' Organizations
+  mots_cles: [syndicat, liberté d'association, négociation collective]
+  priorité: élevée
+  note: Reconnaissance des droits des travailleurs à s'organiser et à négocier
+
+- id: IFC-PS2-015
+  pilier: Social
+  titre: Non-discrimination et égalité des chances
+  paragraphe: 15
+  section: Non-Discrimination and Equal Opportunity
+  mots_cles: [discrimination, égalité, recrutement, emploi, traitement équitable]
+  priorité: critique
+  note: Exigence d'égalité et de non-discrimination dans toutes les décisions d'emploi
+
+- id: IFC-PS2-018
+  pilier: Social
+  titre: Licenciements collectifs
+  paragraphe: 18
+  section: Retrenchment
+  mots_cles: [licenciement, collectif, réduction, alternatives, plan]
+  priorité: moyenne
+  note: Nécessité d'analyser les alternatives et de planifier les licenciements
+
+- id: IFC-PS2-020
+  pilier: Social
+  titre: Mécanisme de règlement des griefs pour les travailleurs
+  paragraphe: 20
+  section: Grievance Mechanism
+  mots_cles: [griefs, plaintes, travailleurs, résolution, mécanisme]
+  priorité: critique
+  note: Exige un mécanisme accessible pour les plaintes des travailleurs
+
+- id: IFC-PS2-021
+  pilier: Social
+  titre: Travail des enfants
+  paragraphe: 21
+  section: Child Labor
+  mots_cles: [enfants, travail, mineur, exploitation, éducation]
+  priorité: critique
+  note: Interdiction du travail des enfants et protection des mineurs employés
+
+- id: IFC-PS2-022
+  pilier: Social
+  titre: Travail forcé
+  paragraphe: 22
+  section: Forced Labor
+  mots_cles: [travail forcé, servitude, traite, contrainte, involontaire]
+  priorité: critique
+  note: Interdiction de toute forme de travail forcé ou obligatoire
+
+- id: IFC-PS2-023
+  pilier: Social
+  titre: Santé et sécurité au travail
+  paragraphe: 23
+  section: Occupational Health and Safety
+  mots_cles: [SST, sécurité, santé, risques, accidents, prévention]
+  priorité: critique
+  note: Exigences pour garantir un environnement de travail sûr et sain
+
+- id: IFC-PS2-027
+  pilier: Social
+  titre: Chaîne d'approvisionnement - Travail des enfants et travail forcé
+  paragraphe: 27
+  section: Supply Chain
+  mots_cles: [chaîne d'approvisionnement, fournisseurs, travail des enfants, travail forcé]
+  priorité: élevée
+  note: Extension des exigences contre le travail des enfants/forcé aux fournisseurs
+
+# Performance Standard 3: Resource Efficiency and Pollution Prevention
+
+- id: IFC-PS3-006
+  pilier: Environnement
+  titre: Efficacité des ressources
+  paragraphe: 6
+  section: Resource Efficiency
+  mots_cles: [efficacité, ressources, énergie, eau, production plus propre]
+  priorité: élevée
+  note: Mesures pour améliorer l'efficacité de la consommation des ressources
+
+- id: IFC-PS3-007
+  pilier: Environnement
+  titre: Gaz à effet de serre
+  paragraphe: 7
+  section: Greenhouse Gases
+  mots_cles: [GES, climat, émissions, réduction, énergies renouvelables]
+  priorité: critique
+  note: Réduction des émissions de GES et promotion d'options bas carbone
+
+- id: IFC-PS3-008
+  pilier: Environnement
+  titre: Quantification des émissions de GES
+  paragraphe: 8
+  section: Greenhouse Gases
+  mots_cles: [GES, émissions, quantification, mesure, reporting]
+  priorité: élevée
+  note: Obligation de quantifier annuellement les émissions pour les projets significatifs
+
+- id: IFC-PS3-009
+  pilier: Environnement
+  titre: Consommation d'eau
+  paragraphe: 9
+  section: Water Consumption
+  mots_cles: [eau, ressources hydriques, conservation, impact]
+  priorité: élevée
+  note: Gestion durable de l'eau pour minimiser les impacts négatifs
+
+- id: IFC-PS3-010
+  pilier: Environnement
+  titre: Prévention de la pollution
+  paragraphe: 10
+  section: Pollution Prevention
+  mots_cles: [pollution, émissions, rejets, prévention, contrôle]
+  priorité: critique
+  note: Principe fondamental d'évitement et de minimisation des rejets polluants
+
+- id: IFC-PS3-012
+  pilier: Environnement
+  titre: Gestion des déchets
+  paragraphe: 12
+  section: Wastes
+  mots_cles: [déchets, gestion, dangereux, recyclage, élimination]
+  priorité: élevée
+  note: Hiérarchie pour la gestion des déchets (éviter, réduire, réutiliser, recycler)
+
+- id: IFC-PS3-013
+  pilier: Environnement
+  titre: Gestion des matières dangereuses
+  paragraphe: 13
+  section: Hazardous Materials Management
+  mots_cles: [matières dangereuses, produits chimiques, stockage, manipulation]
+  priorité: élevée
+  note: Contrôle des risques liés aux matières dangereuses et produits chimiques
+
+- id: IFC-PS3-014
+  pilier: Environnement
+  titre: Utilisation des pesticides
+  paragraphe: 14
+  section: Pesticide Use and Management
+  mots_cles: [pesticides, produits phytosanitaires, gestion intégrée, IPM]
+  priorité: moyenne
+  note: Gestion intégrée des nuisibles et utilisation responsable des pesticides
+
+# Performance Standard 4: Community Health, Safety, and Security
+
+- id: IFC-PS4-005
+  pilier: Social
+  titre: Santé et sécurité des communautés
+  paragraphe: 5
+  section: Community Health and Safety
+  mots_cles: [communautés, santé, sécurité, risques, impacts]
+  priorité: critique
+  note: Évaluation et gestion des risques pour les communautés affectées
+
+- id: IFC-PS4-006
+  pilier: Social
+  titre: Conception et sécurité des infrastructures et équipements
+  paragraphe: 6
+  section: Infrastructure and Equipment Design and Safety
+  mots_cles: [infrastructure, conception, sécurité, risques, accès universel]
+  priorité: élevée
+  note: Conception et construction sécurisées des éléments structurels
+
+- id: IFC-PS4-007
+  pilier: Social
+  titre: Gestion et sécurité des matières dangereuses
+  paragraphe: 7
+  section: Hazardous Materials Management and Safety
+  mots_cles: [matières dangereuses, exposition, communautés, sécurité]
+  priorité: élevée
+  note: Protection des communautés contre l'exposition aux matières dangereuses
+
+- id: IFC-PS4-008
+  pilier: Environnement
+  titre: Services écosystémiques
+  paragraphe: 8
+  section: Ecosystem Services
+  mots_cles: [services écosystémiques, vulnérabilité, ressources naturelles]
+  priorité: moyenne
+  note: Risques liés à la dégradation des services écosystémiques pour les communautés
+
+- id: IFC-PS4-009
+  pilier: Social
+  titre: Exposition des communautés aux maladies
+  paragraphe: 9
+  section: Community Exposure to Disease
+  mots_cles: [maladies, santé publique, vecteurs, épidémies, prévention]
+  priorité: élevée
+  note: Prévention de l'exposition des communautés aux maladies liées au projet
+
+- id: IFC-PS4-011
+  pilier: Social
+  titre: Préparation et réponse aux situations d'urgence
+  paragraphe: 11
+  section: Emergency Preparedness and Response
+  mots_cles: [urgence, préparation, communautés, collaboration, réponse]
+  priorité: élevée
+  note: Collaboration avec les communautés pour les situations d'urgence
+
+- id: IFC-PS4-012
+  pilier: Social
+  titre: Personnel de sécurité
+  paragraphe: 12
+  section: Security Personnel
+  mots_cles: [sécurité, personnel, formation, conduite, usage de la force]
+  priorité: élevée
+  note: Gestion responsable du personnel de sécurité privé et respect des droits
+
+# Performance Standard 5: Land Acquisition and Involuntary Resettlement
+
+- id: IFC-PS5-008
+  pilier: Social
+  titre: Conception du projet et prévention du déplacement
+  paragraphe: 8
+  section: Project Design
+  mots_cles: [conception, alternatives, déplacement, évitement, minimisation]
+  priorité: critique
+  note: Obligation d'examiner des alternatives pour éviter le déplacement
+
+- id: IFC-PS5-009
+  pilier: Social
+  titre: Indemnisation et avantages pour les personnes déplacées
+  paragraphe: 9
+  section: Compensation and Benefits for Displaced Persons
+  mots_cles: [indemnisation, coût de remplacement, compensation, moyens de subsistance]
+  priorité: critique
+  note: Indemnisation équitable pour les pertes de biens et de moyens de subsistance
+
+- id: IFC-PS5-010
+  pilier: Social
+  titre: Engagement communautaire
+  paragraphe: 10
+  section: Community Engagement
+  mots_cles: [engagement, consultation, participation, communautés affectées]
+  priorité: élevée
+  note: Participation des communautés aux décisions concernant la réinstallation
+
+- id: IFC-PS5-011
+  pilier: Social
+  titre: Mécanisme de règlement des griefs
+  paragraphe: 11
+  section: Grievance Mechanism
+  mots_cles: [griefs, plaintes, mécanisme, déplacement, réinstallation]
+  priorité: élevée
+  note: Mécanisme spécifique pour les plaintes liées à la réinstallation
+
+- id: IFC-PS5-019
+  pilier: Social
+  titre: Déplacement physique
+  paragraphe: 19
+  section: Physical Displacement
+  mots_cles: [déplacement, réinstallation, plan d'action, logement, site]
+  priorité: critique
+  note: Plan d'action de réinstallation pour les personnes physiquement déplacées
+
+- id: IFC-PS5-025
+  pilier: Social
+  titre: Déplacement économique
+  paragraphe: 25
+  section: Economic Displacement
+  mots_cles: [déplacement économique, moyens de subsistance, rétablissement]
+  priorité: critique
+  note: Plan de restauration des moyens de subsistance pour le déplacement économique
+
+- id: IFC-PS5-028
+  pilier: Social
+  titre: Amélioration ou restauration des moyens de subsistance
+  paragraphe: 28
+  section: Economic Displacement
+  mots_cles: [moyens de subsistance, restauration, amélioration, revenus]
+  priorité: élevée
+  note: Mesures pour améliorer ou restaurer les moyens de subsistance des personnes déplacées
+
+# Performance Standard 6: Biodiversity Conservation and Sustainable Management of Living Natural Resources
+
+- id: IFC-PS6-007
+  pilier: Environnement
+  titre: Gestion adaptative et hiérarchie d'atténuation pour la biodiversité
+  paragraphe: 7
+  section: General
+  mots_cles: [biodiversité, hiérarchie d'atténuation, gestion adaptative]
+  priorité: critique
+  note: Application de la hiérarchie d'atténuation pour les impacts sur la biodiversité
+
+- id: IFC-PS6-010
+  pilier: Environnement
+  titre: Compensations de biodiversité
+  paragraphe: 10
+  section: Protection and Conservation of Biodiversity
+  mots_cles: [compensation, biodiversité, offset, aucune perte nette, gains]
+  priorité: élevée
+  note: Principes pour la conception et mise en œuvre des compensations de biodiversité
+
+- id: IFC-PS6-014
+  pilier: Environnement
+  titre: Habitat naturel
+  paragraphe: 14
+  section: Natural Habitat
+  mots_cles: [habitat naturel, conversion, dégradation, alternatives]
+  priorité: critique
+  note: Restrictions strictes sur la conversion ou dégradation d'habitats naturels
+
+- id: IFC-PS6-015
+  pilier: Environnement
+  titre: Aucune perte nette en habitats naturels
+  paragraphe: 15
+  section: Natural Habitat
+  mots_cles: [habitat naturel, aucune perte nette, atténuation, compensation]
+  priorité: élevée
+  note: Mesures d'atténuation pour atteindre aucune perte nette de biodiversité
+
+- id: IFC-PS6-017
+  pilier: Environnement
+  titre: Habitat critique
+  paragraphe: 17
+  section: Critical Habitat
+  mots_cles: [habitat critique, espèces menacées, biodiversité, conservation]
+  priorité: critique
+  note: Conditions strictes pour les projets en habitats critiques
+
+- id: IFC-PS6-020
+  pilier: Environnement
+  titre: Aires protégées et reconnues internationalement
+  paragraphe: 20
+  section: Legally Protected and Internationally Recognized Areas
+  mots_cles: [aires protégées, zones de conservation, légal, international]
+  priorité: critique
+  note: Exigences supplémentaires pour les projets dans des aires protégées
+
+- id: IFC-PS6-022
+  pilier: Environnement
+  titre: Espèces exotiques envahissantes
+  paragraphe: 22
+  section: Invasive Alien Species
+  mots_cles: [espèces envahissantes, exotiques, introduction, risques]
+  priorité: moyenne
+  note: Prévention de l'introduction d'espèces exotiques envahissantes
+
+- id: IFC-PS6-024
+  pilier: Environnement
+  titre: Gestion des services écosystémiques
+  paragraphe: 24
+  section: Management of Ecosystem Services
+  mots_cles: [services écosystémiques, prioritaires, impacts, communautés]
+  priorité: élevée
+  note: Identification et gestion des services écosystémiques prioritaires
+
+- id: IFC-PS6-026
+  pilier: Environnement
+  titre: Gestion durable des ressources naturelles vivantes
+  paragraphe: 26
+  section: Sustainable Management of Living Natural Resources
+  mots_cles: [ressources naturelles, gestion durable, production primaire]
+  priorité: élevée
+  note: Standards de durabilité pour l'exploitation des ressources naturelles
+
+- id: IFC-PS6-030
+  pilier: Environnement
+  titre: Chaîne d'approvisionnement
+  paragraphe: 30
+  section: Supply Chain
+  mots_cles: [chaîne d'approvisionnement, vérification, conversion, habitat]
+  priorité: moyenne
+  note: Évaluation des risques environnementaux dans la chaîne d'approvisionnement
+
+# Performance Standard 7: Indigenous Peoples
+
+- id: IFC-PS7-008
+  pilier: Social
+  titre: Identification et évaluation des impacts sur les peuples autochtones
+  paragraphe: 8
+  section: Avoidance of Adverse Impacts
+  mots_cles: [peuples autochtones, impacts, identification, évaluation]
+  priorité: critique
+  note: Processus d'évaluation spécifique pour les impacts sur les peuples autochtones
+
+- id: IFC-PS7-010
+  pilier: Social
+  titre: Participation et consentement des peuples autochtones
+  paragraphe: 10
+  section: Participation and Consent
+  mots_cles: [peuples autochtones, participation, engagement, consultation]
+  priorité: critique
+  note: Processus d'engagement culturellement approprié avec les peuples autochtones
+
+- id: IFC-PS7-012
+  pilier: Social
+  titre: Consentement libre, préalable et éclairé (CLPE)
+  paragraphe: 12
+  section: Participation and Consent
+  mots_cles: [CLPE, consentement, peuples autochtones, négociation]
+  priorité: critique
+  note: Définition et application du principe de consentement libre, préalable et éclairé
+
+- id: IFC-PS7-014
+  pilier: Social
+  titre: Impacts sur les terres et ressources naturelles
+  paragraphe: 14
+  section: Impacts on Lands and Natural Resources Subject to Traditional Ownership or Under Customary Use
+  mots_cles: [terres, ressources, propriété traditionnelle, usage coutumier]
+  priorité: critique
+  note: Mesures concernant les terres traditionnelles et ressources des peuples autochtones
+
+- id: IFC-PS7-015
+  pilier: Social
+  titre: Réinstallation des peuples autochtones
+  paragraphe: 15
+  section: Relocation of Indigenous Peoples from Lands and Natural Resources Subject to Traditional Ownership or Under Customary Use
+  mots_cles: [réinstallation, déplacement, terres traditionnelles, CLPE]
+  priorité: critique
+  note: CLPE obligatoire pour la réinstallation des peuples autochtones
+
+- id: IFC-PS7-016
+  pilier: Social
+  titre: Patrimoine culturel critique
+  paragraphe: 16
+  section: Critical Cultural Heritage
+  mots_cles: [patrimoine culturel, critique, CLPE, identité culturelle]
+  priorité: élevée
+  note: CLPE requis pour les impacts sur le patrimoine culturel critique
+
+- id: IFC-PS7-018
+  pilier: Social
+  titre: Atténuation et bénéfices de développement
+  paragraphe: 18
+  section: Mitigation and Development Benefits
+  mots_cles: [atténuation, bénéfices, développement, culturellement approprié]
+  priorité: élevée
+  note: Mesures d'atténuation et bénéfices de développement culturellement appropriés
+
+# Performance Standard 8: Cultural Heritage
+
+- id: IFC-PS8-006
+  pilier: Social
+  titre: Protection du patrimoine culturel
+  paragraphe: 6
+  section: Protection of Cultural Heritage in Project Design and Execution
+  mots_cles: [patrimoine culturel, protection, conventions, pratiques]
+  priorité: élevée
+  note: Application des pratiques internationalement reconnues pour protéger le patrimoine
+
+- id: IFC-PS8-008
+  pilier: Social
+  titre: Procédures en cas de découverte fortuite
+  paragraphe: 8
+  section: Chance Find Procedures
+  mots_cles: [découverte fortuite, patrimoine, procédure, mesures]
+  priorité: moyenne
+  note: Procédures à suivre en cas de découverte fortuite de patrimoine culturel
+
+- id: IFC-PS8-009
+  pilier: Social
+  titre: Consultation sur le patrimoine culturel
+  paragraphe: 9
+  section: Consultation
+  mots_cles: [consultation, patrimoine culturel, communautés, utilisation]
+  priorité: élevée
+  note: Consultation des communautés qui utilisent le patrimoine culturel
+
+- id: IFC-PS8-011
+  pilier: Social
+  titre: Retrait du patrimoine culturel reproductible
+  paragraphe: 11
+  section: Removal of Replicable Cultural Heritage
+  mots_cles: [patrimoine reproductible, retrait, hiérarchie, atténuation]
+  priorité: moyenne
+  note: Hiérarchie d'atténuation pour le patrimoine culturel reproductible
+
+- id: IFC-PS8-012
+  pilier: Social
+  titre: Retrait du patrimoine culturel non reproductible
+  paragraphe: 12
+  section: Removal of Non-Replicable Cultural Heritage
+  mots_cles: [patrimoine non reproductible, retrait, conditions strictes]
+  priorité: élevée
+  note: Conditions strictes pour le retrait de patrimoine culturel non reproductible
+
+- id: IFC-PS8-013
+  pilier: Social
+  titre: Patrimoine culturel critique
+  paragraphe: 13
+  section: Critical Cultural Heritage
+  mots_cles: [patrimoine critique, usage culturel, protection légale]
+  priorité: critique
+  note: Définition et identification du patrimoine culturel critique
+
+- id: IFC-PS8-016
+  pilier: Social
+  titre: Utilisation commerciale du patrimoine culturel
+  paragraphe: 16
+  section: Project's Use of Cultural Heritage
+  mots_cles: [patrimoine culturel, usage commercial, connaissances traditionnelles]
+  priorité: élevée
+  note: Exigences pour l'utilisation commerciale du patrimoine culturel

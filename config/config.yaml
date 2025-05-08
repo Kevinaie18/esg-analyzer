@@ -1,0 +1,20 @@
+# LLM Configuration
+llm:
+  provider: "openai"  # or "anthropic"
+  model: "gpt-4-turbo-preview"  # for OpenAI
+  temperature: 0.7
+  max_tokens: 4000
+
+# Application Settings
+app:
+  debug: true
+  log_level: "INFO"
+  cache_dir: "cache"
+
+# Standards Configuration
+standards:
+  default_frameworks:
+    - "ifc"
+    - "2x"
+    - "internal"
+  cache_enabled: true 

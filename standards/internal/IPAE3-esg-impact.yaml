@@ -1,0 +1,191 @@
+- id: IPAE3-ESG-001
+  titre: Approche unique de mesure et gestion ESG au niveau du groupe I&P
+  section: 3.8.1 At I&P group level
+  pilier: Gouvernance
+  mots_cles: [ESG, impact measurement, portfolio approach, innovation]
+  priorité: élevée
+  note: Approche complète et reconnue pour maximiser les impacts environnementaux, sociaux et de gouvernance
+
+- id: IPAE3-ESG-002
+  titre: Méthodologie ESG intégrée tout au long du processus d'investissement
+  section: 3.8.1 ESG methodology
+  pilier: Gouvernance
+  mots_cles: [ESG monitoring, due diligence, action plan, IFC Performance Standards]
+  priorité: critique
+  note: Intégration des facteurs ESG comme leviers de performance au cœur de la stratégie des entreprises partenaires
+
+- id: IPAE3-ESG-003
+  titre: Approche au niveau du portefeuille et innovation sectorielle
+  section: 3.8.1 ESG methodology
+  pilier: Transversal
+  mots_cles: [portfolio-level, social protection, carbon emissions, energy efficiency]
+  priorité: élevée
+  note: Initiatives sectorielles dont programme de protection sociale et suivi annuel des émissions carbone
+
+- id: IPAE3-ESG-004
+  titre: Reporting ESG & Impact annuel complet
+  section: 3.8.1 ESG & Impact Reporting
+  pilier: Gouvernance
+  mots_cles: [reporting, transparence, méthodologie, résultats annuels]
+  priorité: élevée
+  note: Publication annuelle d'un examen complet de la stratégie sociétale des véhicules d'investissement
+
+- id: IPAE3-ESG-005
+  titre: Reconnaissance et références externes
+  section: 3.8.1 I&P contributions and references in the ESG and impact investing fields
+  pilier: Gouvernance
+  mots_cles: [UNPRI, OPIM, ESG Best Practices, ImpactAssets 50]
+  priorité: moyenne
+  note: Reconnaissance par les pairs et investisseurs ("A+" UNPRI, adoption des principes OPIM, ESG Best Practices Honors)
+
+- id: IPAE3-ESG-006
+  titre: Système de gestion environnementale et sociale (ESMS)
+  section: 3.8.2 Environmental and Social Management System (ESMS)
+  pilier: Gouvernance
+  mots_cles: [ESMS, exclusion list, risk classification, ESG tracking]
+  priorité: critique
+  note: Exclusion des projets à haut risque ESG et mise en place d'un système de suivi des enjeux ESG du screening à la sortie
+
+- id: IPAE3-ESG-007
+  titre: Processus de screening ESG des investissements potentiels
+  section: 3.8.2 SCREENING
+  pilier: Transversal
+  mots_cles: [ESG assessment, risk identification, climate, gender]
+  priorité: élevée
+  note: Premier filtre d'évaluation ESG avec focus particulier sur les enjeux climatiques et de genre
+
+- id: IPAE3-ESG-008
+  titre: Due diligence ESG approfondie
+  section: 3.8.2 DUE DILIGENCE
+  pilier: Transversal
+  mots_cles: [due diligence, IFC standards, external audit, ESG risk]
+  priorité: critique
+  note: Due diligence externe systématique pour les projets à risque moyen ou élevé, avec vérification des aspects sociaux, environnementaux et de gouvernance
+
+- id: IPAE3-ESG-009
+  titre: Monitoring et plan d'action ESG
+  section: 3.8.2 MONITORING
+  pilier: Gouvernance
+  mots_cles: [ESG action plan, risk mitigation, IFC standards, stakeholders]
+  priorité: critique
+  note: Plan d'action ESG post-investissement avec suivi régulier pour aligner progressivement l'entreprise sur les standards IFC
+
+- id: IPAE3-ESG-010
+  titre: Standards ESG pour les employés
+  section: 3.8.2 MONITORING - For employees
+  pilier: Social
+  mots_cles: [labor laws, decent work, health insurance, gender equality, climate adaptation]
+  priorité: élevée
+  note: Exigences fortes sur le respect du droit du travail, protection sociale, égalité des genres et adaptation au changement climatique
+
+- id: IPAE3-ESG-011
+  titre: Standards ESG pour les clients
+  section: 3.8.2 MONITORING - For clients
+  pilier: Social
+  mots_cles: [prohibited sectors, client protection, microfinance, product quality]
+  priorité: moyenne
+  note: Engagement à éviter les impacts négatifs sur la santé et le bien-être des clients et à fournir des informations accessibles et transparentes
+
+- id: IPAE3-ESG-012
+  titre: Standards ESG pour les autres parties prenantes
+  section: 3.8.2 MONITORING - For other stakeholders
+  pilier: Social
+  mots_cles: [fair business, local communities, environmental impact assessment]
+  priorité: moyenne
+  note: Pratiques commerciales équitables et gestion des impacts sociaux et environnementaux sur les communautés locales
+
+- id: IPAE3-ESG-013
+  titre: Standards de gouvernance
+  section: 3.8.2 MONITORING - Governance
+  pilier: Gouvernance
+  mots_cles: [governance bodies, accounting, transparency, business integrity]
+  priorité: élevée
+  note: Mise en place d'organes de gouvernance formels et de systèmes comptables fiables et transparents
+
+- id: IPAE3-ESG-014
+  titre: Stratégie de sortie ESG
+  section: 3.8.2 EXIT
+  pilier: Gouvernance
+  mots_cles: [ESG exit strategy, sustainable impact, buyer selection]
+  priorité: élevée
+  note: Sélection d'acquéreurs permettant la durabilité des impacts de l'entreprise et assurant de bonnes pratiques ESG
+
+- id: IPAE3-ESG-015
+  titre: Système de gestion des impacts
+  section: 3.8.2 Impact Management System
+  pilier: Gouvernance
+  mots_cles: [impact assessment, scorecard, impact monitoring, stakeholders]
+  priorité: critique
+  note: Méthodologie d'évaluation des impacts avant et après investissement, avec scorecard structurée et suivi d'indicateurs clés
+
+- id: IPAE3-ESG-016
+  titre: Thèse d'impact d'IPAE3
+  section: 3.8.3 IPAE 3 impact thesis
+  pilier: Stratégie
+  mots_cles: [local entrepreneurship, inclusive growth, decent jobs, resilience, SDGs, gender, climate]
+  priorité: critique
+  note: Vision d'impact centrée sur l'entrepreneuriat local, emplois décents, résilience africaine, égalité hommes-femmes et lutte contre le changement climatique
+
+- id: IPAE3-ESG-017
+  titre: Stratégie de genre renforcée
+  section: 3.8.3 Gender strategy
+  pilier: Social
+  mots_cles: [gender lens, women entrepreneurs, 2X Challenge, gender equality]
+  priorité: élevée
+  note: Objectif de 100% d'entreprises répondant aux critères 2X Challenge et minimum 30% de femmes entrepreneures dans le portefeuille
+
+- id: IPAE3-ESG-018
+  titre: Stratégie environnementale et climatique
+  section: 3.8.3 Environmental and climate strategy
+  pilier: Environnement
+  mots_cles: [climate adaptation, climate risks, mitigation, resilience, CO2 emission]
+  priorité: critique
+  note: Triple approche de soutien aux PME africaines face aux risques climatiques (adaptation, mitigation, découplage croissance-émissions)
+
+- id: IPAE3-ESG-019
+  titre: Entreprises développant des produits et services favorables au climat
+  section: 3.8.3 1/ IPAE3 supports SMEs that develop climate-friendly products
+  pilier: Environnement
+  mots_cles: [climate solutions, IPCC, adaptation, mitigation, business model]
+  priorité: élevée
+  note: Objectif de 60% d'entreprises offrant des solutions d'adaptation ou d'atténuation du changement climatique
+
+- id: IPAE3-ESG-020
+  titre: Accompagnement à l'adaptation au changement climatique
+  section: 3.8.3 2/ IPAE3 helps SMEs and their stakeholders adapt
+  pilier: Environnement
+  mots_cles: [climate risk evaluation, adaptation plan, stakeholders, resilience]
+  priorité: élevée
+  note: Accompagnement à trois niveaux (entreprises investies, parties prenantes, fonds) pour renforcer l'adaptation au changement climatique
+
+- id: IPAE3-ESG-021
+  titre: Découplage croissance économique et émissions CO2
+  section: 3.8.3 3/ Decorrelation of economic growth and CO2 emissions
+  pilier: Environnement
+  mots_cles: [decarbonization, decoupling, energy audit, TCFD]
+  priorité: élevée
+  note: Objectif de découplage significatif (15%) entre croissance économique et émissions de CO2 des entreprises en portefeuille
+
+- id: IPAE3-ESG-022
+  titre: Objectifs d'impact au niveau du portefeuille
+  section: 3.8.4 Portfolio level impact targets
+  pilier: Stratégie
+  mots_cles: [impact targets, portfolio management, key impact indicators]
+  priorité: critique
+  note: Six objectifs d'impact clés avec des cibles chiffrées pour suivre la performance du fonds en matière d'entrepreneuriat local, d'emploi, de résilience, d'égalité des genres et de climat
+
+- id: IPAE3-ESG-023
+  titre: Structure d'incitation basée sur l'impact
+  section: 3.8.5 Implementing an Impact-based incentive structure
+  pilier: Gouvernance
+  mots_cles: [carried interest, hurdle rate, impact incentive, key targets]
+  priorité: élevée
+  note: Mécanisme innovant liant la performance d'impact aux termes financiers (taux de hurdle et carried interest) pour l'équipe d'investissement
+
+- id: IPAE3-ESG-024
+  titre: Gouvernance extra-financière
+  section: 3.8.5 Establishment of extra-financial governance
+  pilier: Gouvernance
+  mots_cles: [ESG governance, impact committee, advisory committee, ESG specialist]
+  priorité: élevée
+  note: Structure de gouvernance comprenant un spécialiste ESG au comité d'investissement, un comité ESG & Impact indépendant et des rôles spécifiques pour le comité consultatif

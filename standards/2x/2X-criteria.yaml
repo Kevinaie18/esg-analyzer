@@ -1,0 +1,179 @@
+- id: 2X-BasicESG-01
+  pilier: Basic 2X ESG
+  titre: Évaluation ESG fondamentale
+  paragraphe: 1
+  section: Vue d'ensemble
+  mots_cles: [ESG, environnement, social, standards, GBVH, alignement]
+  priorité: critique
+  note: Évaluation des normes environnementales et sociales fondamentales
+
+- id: 2X-BasicESG-02
+  pilier: Basic 2X ESG
+  titre: Liste d'exclusion
+  paragraphe: 1
+  section: Exclusion
+  mots_cles: [exclusion, activités interdites, travail forcé, travail des enfants]
+  priorité: critique
+  note: Engagement à ne pas financer des activités figurant sur la liste d'exclusion
+
+- id: 2X-BasicESG-03
+  pilier: Basic 2X ESG
+  titre: Engagement envers les droits humains
+  paragraphe: 1
+  section: Droits humains
+  mots_cles: [droits humains, OIT, normes du travail, discrimination]
+  priorité: critique
+  note: Engagement démontré envers les normes fondamentales du travail de l'OIT
+
+- id: 2X-BasicESG-04
+  pilier: Basic 2X ESG
+  titre: Mesures de protection contre la VSBG
+  paragraphe: 1
+  section: GBVH
+  mots_cles: [VSBG, violence, harcèlement, tolérance zéro, protection]
+  priorité: critique
+  note: Au moins une mesure de protection de base contre la violence et le harcèlement basés sur le genre
+
+- id: 2X-Governance-01
+  pilier: Governance & Accountability
+  titre: Exigences minimales de gouvernance
+  paragraphe: 1
+  section: Gouvernance
+  mots_cles: [gouvernance, responsabilité, intentionnalité, alignement]
+  priorité: critique
+  note: Indicateurs minimaux dans l'action stratégique, systèmes de gestion et données
+
+- id: 2X-Governance-02
+  pilier: Governance & Accountability
+  titre: Actions stratégiques
+  paragraphe: 2
+  section: Actions stratégiques
+  mots_cles: [stratégie, engagement, objectifs, genre, équité]
+  priorité: élevée
+  note: Engagements publics, objectifs mesurables et plans d'action liés au genre
+
+- id: 2X-Governance-03
+  pilier: Governance & Accountability
+  titre: Systèmes de gestion
+  paragraphe: 3
+  section: Systèmes
+  mots_cles: [politiques, suivi, mécanismes, genre]
+  priorité: élevée
+  note: Politiques, responsabilité et mécanismes tenant compte du genre
+
+- id: 2X-Governance-04
+  pilier: Governance & Accountability
+  titre: Données désagrégées par genre
+  paragraphe: 4
+  section: Données
+  mots_cles: [données, genre, sexe, collecte, analyse]
+  priorité: moyenne
+  note: Collecte et analyse régulières de données désagrégées par genre
+
+- id: 2X-Entrepreneurship-01
+  pilier: Entrepreneurship & Ownership
+  titre: Propriété des femmes
+  paragraphe: 1
+  section: Propriété
+  mots_cles: [propriété, actionnariat, femmes, seuil]
+  priorité: critique
+  note: Part de propriété détenue par les femmes (51%)
+
+- id: 2X-Entrepreneurship-02
+  pilier: Entrepreneurship & Ownership
+  titre: Entreprise fondée par une femme
+  paragraphe: 2
+  section: Fondation
+  mots_cles: [fondatrice, fondation, entrepreneure, création]
+  priorité: critique
+  note: Entreprise fondée par une femme ou groupe de femmes (50%)
+
+- id: 2X-Leadership-01
+  pilier: Leadership
+  titre: Femmes dans la direction générale
+  paragraphe: 1
+  section: Direction
+  mots_cles: [direction, senior, management, C-suite]
+  priorité: élevée
+  note: Part de femmes dans la direction générale (seuil variable)
+
+- id: 2X-Leadership-02
+  pilier: Leadership
+  titre: Femmes au conseil d'administration/comité d'investissement
+  paragraphe: 2
+  section: Conseil
+  mots_cles: [conseil, administration, comité, investissement]
+  priorité: élevée
+  note: Part de femmes au conseil ou comité d'investissement (seuil variable)
+
+- id: 2X-Employment-01
+  pilier: Employment
+  titre: Femmes dans la main-d'œuvre
+  paragraphe: 1
+  section: Main-d'œuvre
+  mots_cles: [employées, main-d'œuvre, personnel, ETP]
+  priorité: élevée
+  note: Part de femmes dans la main-d'œuvre (seuil variable)
+
+- id: 2X-Employment-02
+  pilier: Employment
+  titre: Indicateur de qualité d'emploi
+  paragraphe: 2
+  section: Qualité
+  mots_cles: [qualité, emploi, barrières, conditions]
+  priorité: moyenne
+  note: Efforts pour éliminer les barrières à l'emploi de qualité pour les femmes
+
+- id: 2X-SupplyChain-01
+  pilier: Supply Chain
+  titre: Engagement envers les femmes dans la chaîne d'approvisionnement
+  paragraphe: 1
+  section: Engagement
+  mots_cles: [chaîne, approvisionnement, engagement, diversité]
+  priorité: moyenne
+  note: Engagement stratégique envers les femmes dans la chaîne d'approvisionnement
+
+- id: 2X-SupplyChain-02
+  pilier: Supply Chain
+  titre: Indicateur de qualité dans la chaîne d'approvisionnement
+  paragraphe: 2
+  section: Qualité
+  mots_cles: [qualité, chaîne, approvisionnement, indicateur]
+  priorité: moyenne
+  note: Au moins un indicateur de qualité dans la chaîne d'approvisionnement
+
+- id: 2X-Products-01
+  pilier: Products & Services
+  titre: Produits/services améliorant le bien-être des femmes/filles
+  paragraphe: 1
+  section: Bien-être
+  mots_cles: [produits, services, bien-être, femmes, filles]
+  priorité: élevée
+  note: Produits/services ayant des effets positifs spécifiques au genre
+
+- id: 2X-Products-02
+  pilier: Products & Services
+  titre: Conception axée sur le genre
+  paragraphe: 2
+  section: Conception
+  mots_cles: [conception, cycle de vie, considérations, genre]
+  priorité: moyenne
+  note: Intégration de considérations spécifiques au genre dans le cycle de vie du produit/service
+
+- id: 2X-Portfolio-01
+  pilier: Portfolio
+  titre: Portefeuille d'institutions financières
+  paragraphe: 1
+  section: IF
+  mots_cles: [institutions, financières, portefeuille, prêts]
+  priorité: élevée
+  note: Pourcentage du portefeuille ou des produits de prêts soutenant des entreprises alignées 2X (30%)
+
+- id: 2X-Portfolio-02
+  pilier: Portfolio
+  titre: Portefeuille de fonds
+  paragraphe: 2
+  section: Fonds
+  mots_cles: [fonds, portefeuille, sociétés, alignement]
+  priorité: élevée
+  note: Pourcentage d'entreprises du portefeuille alignées 2X (30-50%)
