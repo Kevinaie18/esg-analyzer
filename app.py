@@ -7,18 +7,11 @@ import yaml
 import streamlit as st
 from dotenv import load_dotenv
 from loguru import logger
+import re
 
-def reorder_sections(markdown_text: str) -> str:
-    """Reorder sections in markdown output by their numbered headers (## N. ...)."""
-    # Find all section headers and their content
-    pattern = re.compile(r'(##\s*(\d+)\..*?)(?=\n##\s*\d+\.|\Z)', re.DOTALL)
-    sections = pattern.findall(markdown_text)
-    if not sections:
-        return markdown_text  # fallback if no matches
-    # Sort sections by their number
-    sorted_sections = sorted(sections, key=lambda x: int(x[1]))
-    # Reconstruct the markdown
-    return '\n\n'.join([s[0].strip() for s in sorted_sections])
+from standards.loader import StandardsLoader
+from prompts.enhanced_prompts import EnhancedPromptManager
+from engine.llm_service import get_llm_service
 
 # Load environment variables
 load_dotenv()
@@ -61,7 +54,6 @@ llm_provider = st.selectbox(
     key="llm_provider_select"
 )
 
-# Dynamically update model options based on provider
 if llm_provider == "OpenAI":
     model_options = ["gpt-4-turbo-preview", "gpt-4", "gpt-3.5-turbo"]
     model_key = "openai_model"
@@ -79,11 +71,9 @@ llm_model = st.selectbox(
     key=model_key
 )
 
-# Update session state
 st.session_state.llm_provider = llm_provider
 st.session_state.llm_model = llm_model
 
-# Input form (only company info and frameworks)
 with st.form("company_info_form"):
     st.subheader("Company Information")
     col1, col2 = st.columns(2)
@@ -112,7 +102,6 @@ with st.form("company_info_form"):
     )
     submitted = st.form_submit_button("Generate Analysis")
 
-# Process form submission
 if submitted:
     if not company_name or not country or not sector or not description:
         st.error("Please fill in all required fields.")
@@ -121,13 +110,11 @@ if submitted:
     else:
         try:
             with st.spinner("Generating analysis..."):
-                # Initialize LLM service with selected model
                 llm_service = get_llm_service(
                     provider=st.session_state.llm_provider.lower(),
                     model=st.session_state.llm_model,
                     temperature=config["llm"]["temperature"]
                 )
-                # Prepare company info
                 company_info = {
                     "name": company_name,
                     "country": country,
@@ -135,21 +122,17 @@ if submitted:
                     "description": description,
                     "size": size if size else None
                 }
-                # Generate prompt
                 prompt = prompt_manager.generate_analysis_prompt(
                     company_info=company_info,
                     selected_frameworks=frameworks,
                     detail_level=detail_level
                 )
-                # Get LLM response
                 response = llm_service.generate_response(
                     prompt,
                     max_tokens=config["llm"]["max_tokens"]
                 )
-                # Display results
                 st.markdown("## Analysis Results")
                 st.markdown(response)
-                # Add download button for the report
                 st.download_button(
                     label="Download Report",
                     data=response,
