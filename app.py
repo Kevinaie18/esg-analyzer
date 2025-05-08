@@ -7,7 +7,6 @@ import yaml
 import streamlit as st
 from dotenv import load_dotenv
 from loguru import logger
-import re
 
 def reorder_sections(markdown_text: str) -> str:
     """Reorder sections in markdown output by their numbered headers (## N. ...)."""
@@ -147,8 +146,6 @@ if submitted:
                     prompt,
                     max_tokens=config["llm"]["max_tokens"]
                 )
-                # Reorder sections if needed
-                response = reorder_sections(response)
                 # Display results
                 st.markdown("## Analysis Results")
                 st.markdown(response)
