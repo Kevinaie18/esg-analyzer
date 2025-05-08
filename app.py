@@ -35,8 +35,40 @@ st.set_page_config(
 
 st.title("ESG & Impact Pre-Investment Analyzer")
 st.markdown("""
-This tool helps investment teams generate comprehensive ESG and Impact reports during the pre-investment phase.
-Enter the company information below to generate an analysis based on selected frameworks.
+## 🎯 Comment tirer le meilleur parti de l'ESG & Impact Analyzer ?
+- **Répondez de façon précise et synthétique** aux questions-clés du pré-questionnaire : plus vos réponses sont concrètes, plus l'analyse sera pertinente et actionnable.
+- **Ciblez les enjeux business et ESG majeurs** : mettez en avant vos priorités, risques et opportunités pour un rapport sur-mesure.
+- **Utilisez l'outil pour préparer vos comités d'investissement, vos due diligences ou vos plans d'action ESG.**
+- **Astuce :** Pour un rapport le plus utile possible, soyez factuel, mettez en avant vos priorités, et précisez vos attentes d'investissement ou d'impact.
+
+---
+
+## 🧠 Capacités des modèles disponibles
+
+### OpenAI
+- **gpt-4-turbo-preview**  
+  Analyse approfondie, recommandations stratégiques, très bonne adaptation au contexte complexe.
+- **gpt-4**  
+  Analyse détaillée, bon compromis entre profondeur et rapidité.
+- **gpt-3.5-turbo**  
+  Synthèse rapide, réponses claires, adapté aux analyses standards et aux rapports courts.
+
+### Anthropic
+- **claude-3-opus-20240229**  
+  Excellente compréhension des enjeux complexes, nuances fines, idéal pour les dossiers à fort enjeu.
+- **claude-3-sonnet-20240229**  
+  Bon équilibre entre rapidité et qualité, adapté aux analyses ESG courantes.
+- **claude-3-haiku-20240307**  
+  Très rapide, efficace pour les screenings et synthèses opérationnelles.
+
+### DeepSeek (via Fireworks)
+- **accounts/fireworks/models/deepseek-r1-basic**  
+  Réponses concises, factuelles, très rapide pour les screenings et les synthèses opérationnelles.
+
+---
+
+**Choisissez le modèle selon la profondeur d'analyse souhaitée et le temps disponible.**  
+**Plus vos réponses initiales sont précises, plus le rapport généré sera utile et actionnable.**
 """)
 
 # LLM provider and model selection OUTSIDE the form for dynamic updates
