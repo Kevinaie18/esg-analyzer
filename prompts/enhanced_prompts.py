@@ -43,18 +43,96 @@ INDUSTRY BEST PRACTICES:
 """,
     "Manufacturing": """
 ### SECTOR-SPECIFIC FOCUS: MANUFACTURING
+
+INDUSTRY BEST PRACTICES:
+- Energy Efficiency:
+  * Renewable energy adoption
+  * Energy audits and monitoring
+  * Smart metering systems
+  * Energy-efficient equipment
+  * Heat recovery systems
+- Waste Management:
+  * Circular economy practices
+  * Recycling programs
+  * Hazardous waste handling
+  * Zero waste initiatives
+  * By-product valorization
+- Worker Safety:
+  * Safety training programs
+  * PPE requirements
+  * Emergency procedures
+  * Regular safety audits
+  * Incident reporting system
+- Supply Chain:
+  * Supplier ESG assessment
+  * Local procurement
+  * Quality control systems
+  * Traceability protocols
+  * Ethical sourcing
 - Focus on resource efficiency, emissions, waste management, occupational health & safety, and supply chain labor standards.
 - Highlight SDGs 9, 12, 13, and relevant IFC PS2, PS3, PS6, and ISO standards.
 - Identify risks related to hazardous materials, energy use, and labor conditions.
 """,
     "Services": """
 ### SECTOR-SPECIFIC FOCUS: SERVICES
+
+INDUSTRY BEST PRACTICES:
+- Data Privacy & Security:
+  * GDPR compliance
+  * Data encryption
+  * Access controls
+  * Regular security audits
+  * Incident response plan
+- Customer Experience:
+  * Service quality metrics
+  * Customer feedback system
+  * Accessibility features
+  * Fair pricing policy
+  * Complaint resolution
+- Digital Inclusion:
+  * Universal access
+  * Digital literacy programs
+  * Adaptive technologies
+  * Multi-language support
+  * Rural connectivity
+- Workplace Culture:
+  * Diversity & inclusion
+  * Mental health support
+  * Flexible working
+  * Career development
+  * Equal pay policy
 - Emphasize data privacy, customer well-being, gender equality, and indirect environmental impacts (e.g., energy use in IT).
 - Highlight SDGs 5, 8, 9, and relevant IFC PS2, PS4, and digital sector codes.
 - Identify risks related to gender disparity, digital inclusion, and E&S management systems.
 """,
     "Healthcare": """
 ### SECTOR-SPECIFIC FOCUS: HEALTHCARE
+
+INDUSTRY BEST PRACTICES:
+- Patient Safety:
+  * Clinical protocols
+  * Infection control
+  * Medical equipment safety
+  * Staff training programs
+  * Incident reporting
+- Healthcare Access:
+  * Affordable pricing
+  * Insurance partnerships
+  * Telemedicine services
+  * Community outreach
+  * Emergency protocols
+- Medical Ethics:
+  * Patient privacy
+  * Informed consent
+  * Clinical trials ethics
+  * End-of-life care
+  * Data protection
+- Quality Control:
+  * Accreditation compliance
+  * Regular audits
+  * Outcome tracking
+  * Patient feedback
+  * Staff certification
 - Focus on patient safety, access to healthcare, supply chain ethics, and waste management (medical waste).
 - Highlight SDGs 3, 5, 10, and relevant IFC PS2, PS4, and healthcare regulations.
 - Identify risks related to access, affordability, and regulatory compliance.
