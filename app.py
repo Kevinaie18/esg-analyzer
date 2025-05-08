@@ -77,23 +77,28 @@ with st.form("company_info_form"):
     if model_provider != st.session_state.llm_provider:
         st.session_state.llm_provider = model_provider
     
+    # Only show the relevant model selector
+    model_name = None
     if model_provider == "OpenAI":
         model_name = st.selectbox(
             "Select OpenAI Model",
             ["gpt-4-turbo-preview", "gpt-4", "gpt-3.5-turbo"],
-            index=0
+            index=0,
+            key="openai_model"
         )
     elif model_provider == "Anthropic":
         model_name = st.selectbox(
             "Select Anthropic Model",
             ["claude-3-opus-20240229", "claude-3-sonnet-20240229", "claude-3-haiku-20240307"],
-            index=0
+            index=0,
+            key="anthropic_model"
         )
-    else:  # DeepSeek
+    elif model_provider == "DeepSeek":
         model_name = st.selectbox(
             "Select DeepSeek Model",
             ["accounts/fireworks/models/deepseek-r1-basic"],
-            index=0
+            index=0,
+            key="deepseek_model"
         )
     
     frameworks = st.multiselect(
