@@ -1,5 +1,5 @@
 """
-Enhanced prompt templates for comprehensive ESG and Impact analysis.
+Enhanced prompt templates for actionable ESG and Impact analysis with dynamic sector adaptation.
 """
 
 from typing import Dict, List, Optional
@@ -7,8 +7,36 @@ from jinja2 import Template
 from loguru import logger
 from standards.loader import StandardsLoader, StandardCriterion
 
+# Example sector-specific prompt blocks (expand as needed)
+SECTOR_PROMPT_BLOCKS = {
+    "Agribusiness": """
+### SECTOR-SPECIFIC FOCUS: AGRIBUSINESS
+- Pay special attention to land use, biodiversity, water management, supply chain traceability, and labor rights in rural areas.
+- Highlight SDGs 2, 12, 15, and relevant IFC PS6, PS1, and local agricultural standards.
+- Identify risks related to deforestation, pesticide use, and smallholder inclusion.
+""",
+    "Manufacturing": """
+### SECTOR-SPECIFIC FOCUS: MANUFACTURING
+- Focus on resource efficiency, emissions, waste management, occupational health & safety, and supply chain labor standards.
+- Highlight SDGs 9, 12, 13, and relevant IFC PS2, PS3, PS6, and ISO standards.
+- Identify risks related to hazardous materials, energy use, and labor conditions.
+""",
+    "Services": """
+### SECTOR-SPECIFIC FOCUS: SERVICES
+- Emphasize data privacy, customer well-being, gender equality, and indirect environmental impacts (e.g., energy use in IT).
+- Highlight SDGs 5, 8, 9, and relevant IFC PS2, PS4, and digital sector codes.
+- Identify risks related to gender disparity, digital inclusion, and E&S management systems.
+""",
+    "Healthcare": """
+### SECTOR-SPECIFIC FOCUS: HEALTHCARE
+- Focus on patient safety, access to healthcare, supply chain ethics, and waste management (medical waste).
+- Highlight SDGs 3, 5, 10, and relevant IFC PS2, PS4, and healthcare regulations.
+- Identify risks related to access, affordability, and regulatory compliance.
+"""
+}
+
 class EnhancedPromptManager:
-    """Manages the generation and assembly of enhanced prompts for ESG analysis."""
+    """Manages the generation and assembly of enhanced prompts for ESG analysis, with dynamic sector adaptation."""
     
     def __init__(self, standards_loader: StandardsLoader):
         self.standards_loader = standards_loader
@@ -19,38 +47,18 @@ class EnhancedPromptManager:
             f"- {c.id}: {c.title} ({c.priority.upper()} priority)\n  {c.description}"
             for c in criteria
         ])
-        
-    def _get_business_activities_template(self) -> str:
-        """Template for business activities analysis."""
-        return """
-BUSINESS ACTIVITIES ANALYSIS:
-For each significant business activity identified, please provide:
-1. Activity name and description
-2. Estimated % of revenue/operations
-3. Key ESG risks and opportunities specific to this activity
-4. Climate impact and solutions
-5. Social impact potential
-6. Alignment with IPAE3's impact thesis
 
-Please use this format for each activity:
-ACTIVITY: [Name]
-REVENUE SHARE: [Percentage]
-KEY ESG FACTORS:
-- Environmental: [List key factors]
-- Social: [List key factors]
-- Governance: [List key factors]
-CLIMATE IMPACT: [Analysis]
-SOCIAL IMPACT: [Analysis]
-IPAE3 ALIGNMENT: [Analysis]
-"""
-        
+    def _get_sector_prompt_block(self, sector: str) -> str:
+        """Return sector-specific prompt block if available."""
+        return SECTOR_PROMPT_BLOCKS.get(sector, "")
+
     def generate_analysis_prompt(
         self,
         company_info: Dict,
         selected_frameworks: List[str],
         detail_level: str = "standard"
     ) -> str:
-        """Generate the enhanced main analysis prompt."""
+        """Generate the actionable main analysis prompt, dynamically adapted to sector, size, and geography."""
         
         # Load selected standards
         standards = {
@@ -69,9 +77,12 @@ IPAE3 ALIGNMENT: [Analysis]
                 for criterion in standard.criteria:
                     criteria_by_pillar[criterion.pillar].append(criterion)
         
-        # Generate the enhanced prompt template
+        # Get sector-specific block
+        sector_block = self._get_sector_prompt_block(company_info.get("sector", ""))
+        
+        # Generate the actionable prompt template
         template = Template("""
-You are an expert ESG and Impact analyst specializing in pre-investment analysis. Your task is to analyze the following company information and provide a comprehensive ESG and Impact assessment based on the specified frameworks.
+You are an expert ESG and Impact analyst. Your task is to extract actionable, investment-relevant insights for the following company. Focus on identifying the most critical ESG and impact issues, referencing specific standards and frameworks.
 
 COMPANY INFORMATION:
 Name: {{ company_info.name }}
@@ -98,171 +109,59 @@ SOCIAL (S):
 GOVERNANCE (G):
 {{ criteria_g }}
 
-{{ business_activities_template }}
+{{ sector_block }}
 
-Please provide a detailed analysis following this format:
+---
 
-1. EXECUTIVE SUMMARY (1 page max)
-   - Key ESG risks and opportunities (minimum 3 each)
-   - Main impact potential (quantify where possible)
-   - Critical areas for due diligence (prioritized list)
-   - Overall alignment with IPAE3's impact thesis
-   - Key findings and recommendations (top 5)
+# ACTIONABLE INSIGHTS REPORT
 
-2. BUSINESS ACTIVITIES BREAKDOWN
-   - Detailed analysis of each major business activity:
-     * Revenue/operations distribution
-     * Activity-specific ESG risks and opportunities
-     * Climate impact and solutions
-     * Social impact potential
-     * Alignment with IPAE3's impact thesis
-   - Cross-activity synergies and conflicts
-   - Combined impact assessment
-   - Activity-specific recommendations
+## 1. SDG ALIGNMENT
+- Which specific UN Sustainable Development Goals (SDGs) does the company contribute to?
+- For each SDG, explain HOW the company contributes (reference business activities, products, or services).
+- Use SDG icons or numbers for clarity.
 
-3. ENVIRONMENTAL ANALYSIS
-   - Key environmental risks and opportunities:
-     * Direct environmental impacts
-     * Indirect environmental impacts
-     * Supply chain environmental risks
-     * Resource efficiency opportunities
-   - Climate impact assessment:
-     * Climate solutions provided by the company
-     * Company's vulnerability to climate risks
-     * Adaptation strategies and readiness
-     * Carbon footprint analysis
-     * Potential for decoupling growth from emissions
-   - Environmental management practices:
-     * Current systems and policies
-     * Compliance with environmental regulations
-     * Environmental performance monitoring
-     * Environmental training and awareness
-   - Scoring against key environmental standards
-   - Recommendations for environmental improvement
+## 2. IFC PERFORMANCE STANDARDS
+- Which IFC Performance Standards are most relevant to this company's operations? List the top 3-5.
+- For each, explain WHY it applies (reference company activities, sector, geography, or risks).
+- If any standards are not relevant, briefly state why.
 
-4. SOCIAL ANALYSIS
-   - Key social risks and opportunities:
-     * Labor rights and working conditions
-     * Health and safety
-     * Community relations
-     * Human rights considerations
-   - Labor and community relations:
-     * Employee engagement
-     * Community engagement
-     * Stakeholder management
-     * Grievance mechanisms
-   - Social impact potential:
-     * Job creation and quality
-     * Skills development
-     * Community development
-     * Social inclusion
-   - Gender empowerment assessment:
-     * Gender representation
-     * Equal opportunities
-     * Gender-sensitive policies
-     * Leadership development
-   - Decent jobs creation potential:
-     * Job quality metrics
-     * Career development
-     * Employee benefits
-     * Work-life balance
-   - Scoring against key social standards
-   - Recommendations for social improvement
+## 3. SECTOR-SPECIFIC STANDARDS & RISKS
+- Identify the most important industry-specific standards, guidelines, or corrective measures for this company (e.g., SASB, GRI, ISO, local codes).
+- List the top 3 sector-specific ESG risks and the standards that address them.
+- For each, explain the connection to the company's business model.
 
-5. GOVERNANCE ANALYSIS
-   - Key governance risks and opportunities:
-     * Board composition and independence
-     * Executive compensation
-     * Shareholder rights
-     * Anti-corruption measures
-   - Corporate structure and controls:
-     * Organizational structure
-     * Internal controls
-     * Risk management
-     * Compliance systems
-   - Compliance and ethics:
-     * Code of conduct
-     * Anti-corruption policies
-     * Whistleblower protection
-     * Ethics training
-   - ESG integration:
-     * ESG governance structure
-     * ESG risk management
-     * ESG performance monitoring
-     * ESG reporting
-   - Scoring against key governance standards
-   - Recommendations for governance improvement
+## 4. IPAE3 IMPACT FRAMEWORK ALIGNMENT
+- Assess the company's alignment with the following impact pillars:
+  - Local entrepreneurship
+  - Decent jobs & job creation
+  - Gender lens & empowerment
+  - Climate action & resilience
+- For each pillar, provide a clear assessment (aligned/partially aligned/not aligned) and justification.
 
-6. IMPACT THESIS ALIGNMENT
-   - Local entrepreneurship support:
-     * Local value chain development
-     * Local supplier development
-     * Local innovation support
-     * Local market development
-   - Decent jobs creation:
-     * Job creation potential
-     * Job quality assessment
-     * Skills development
-     * Career progression
-   - Climate action and resilience:
-     * Climate solutions
-     * Climate risk management
-     * Climate adaptation
-     * Climate mitigation
-   - Gender empowerment:
-     * Gender representation
-     * Equal opportunities
-     * Gender-sensitive policies
-     * Leadership development
-   - Overall impact potential:
-     * Combined impact assessment
-     * Impact scalability
-     * Impact sustainability
-     * Impact measurement
-   - Alignment with IPAE3's objectives:
-     * Strategic alignment
-     * Impact additionality
-     * Impact risks
-     * Impact opportunities
+## 5. 2X CHALLENGE CRITERIA (if applicable)
+- Score the company against the 2X Challenge criteria (0-2 scale: 0=not met, 1=partially met, 2=fully met).
+- For each criterion, provide a brief justification.
 
-7. RECOMMENDATIONS
-   - Priority actions for due diligence:
-     * Critical areas to investigate
-     * Key documents to review
-     * Key stakeholders to engage
-     * Key metrics to verify
-   - Suggested ESG clauses for shareholder agreement:
-     * Governance requirements
-     * Environmental commitments
-     * Social commitments
-     * Impact commitments
-   - Key performance indicators to track:
-     * Environmental KPIs
-     * Social KPIs
-     * Governance KPIs
-     * Impact KPIs
-   - Activity-specific recommendations:
-     * Environmental improvements
-     * Social improvements
-     * Governance improvements
-     * Impact improvements
-   - Cross-activity improvement opportunities:
-     * Synergies to leverage
-     * Conflicts to resolve
-     * Combined improvements
-     * Integrated solutions
+## 6. SUMMARY DASHBOARD
+- Create a summary table showing:
+  - SDGs addressed (with icons/numbers)
+  - Relevant IFC standards
+  - Key sector standards
+  - IPAE3 pillar alignment (with color-coded status)
+  - 2X Challenge scores
 
-Please ensure your analysis is:
-- Evidence-based and focused on the information provided
-- Aligned with the specified frameworks
-- Actionable and specific to the company's context
-- Clear about any assumptions or limitations
-- Includes specific references to relevant standards
-- Provides clear risk scoring and prioritization
-- Addresses both individual activities and their combined impact
-- Quantifies impacts and risks where possible
-- Provides concrete examples and specific recommendations
-- Considers both short-term and long-term implications
+## 7. DUE DILIGENCE ACTION CHECKLIST
+- List the top 5-10 specific due diligence questions or actions for the investment team, derived from the standards and risks identified above.
+- Make each item actionable and reference the relevant standard or risk.
+
+---
+
+**Instructions:**
+- Be concise, specific, and actionable.
+- Reference standards and frameworks directly (use numbers, icons, or color codes where possible).
+- Justify all matches and scores.
+- Lead with the summary dashboard and action checklist.
+- Avoid generic analysis; focus on what matters most for investment decision-making.
 """)
         
         # Render the template
@@ -272,7 +171,7 @@ Please ensure your analysis is:
             criteria_e=self._get_criteria_text(criteria_by_pillar['E']),
             criteria_s=self._get_criteria_text(criteria_by_pillar['S']),
             criteria_g=self._get_criteria_text(criteria_by_pillar['G']),
-            business_activities_template=self._get_business_activities_template()
+            sector_block=sector_block
         )
         
         return prompt

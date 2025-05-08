@@ -8,6 +8,7 @@ import os
 import requests
 from loguru import logger
 from tenacity import retry, stop_after_attempt, wait_exponential
+from functools import lru_cache
 
 class LLMService(ABC):
     """Abstract base class for LLM services."""
@@ -127,13 +128,39 @@ class DeepSeekService(LLMService):
             logger.error(f"Error generating response from DeepSeek: {str(e)}")
             raise
 
+# Simple in-memory cache for LLM responses (can be replaced with diskcache for persistence)
+def llm_cache_key(prompt: str, model: str, provider: str, **kwargs):
+    # Create a cache key based on prompt, model, provider, and relevant kwargs
+    key = f"{provider}|{model}|{prompt[:100]}|{str(kwargs)}"
+    return key
+
+class CachedLLMService(LLMService):
+    """LLM service with in-memory caching."""
+    def __init__(self, base_service: LLMService, provider: str, model: str):
+        self.base_service = base_service
+        self.provider = provider
+        self.model = model
+
+    @lru_cache(maxsize=128)
+    def _cached_response(self, prompt: str, kwargs_str: str):
+        # kwargs_str is a stringified version of kwargs for cache key
+        import ast
+        kwargs = ast.literal_eval(kwargs_str)
+        return self.base_service.generate_response(prompt, **kwargs)
+
+    def generate_response(self, prompt: str, **kwargs) -> str:
+        kwargs_str = str(kwargs)
+        return self._cached_response(prompt, kwargs_str)
+
+
 def get_llm_service(provider: str = "openai", **kwargs) -> LLMService:
-    """Factory function to get the appropriate LLM service."""
+    """Factory function to get the appropriate LLM service with caching."""
     if provider.lower() == "openai":
-        return OpenAIService(**kwargs)
+        base = OpenAIService(**kwargs)
     elif provider.lower() == "anthropic":
-        return AnthropicService(**kwargs)
+        base = AnthropicService(**kwargs)
     elif provider.lower() == "deepseek":
-        return DeepSeekService(**kwargs)
+        base = DeepSeekService(**kwargs)
     else:
-        raise ValueError(f"Unsupported LLM provider: {provider}") 
+        raise ValueError(f"Unsupported LLM provider: {provider}")
+    return CachedLLMService(base, provider, kwargs.get('model', '')) 
