@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from loguru import logger
 
 from standards.loader import StandardsLoader
-from prompts.master_prompt import PromptManager
+from prompts.enhanced_prompts import EnhancedPromptManager
 from engine.llm_service import get_llm_service
 
 # Load environment variables
@@ -23,7 +23,7 @@ def load_config():
 # Initialize components
 config = load_config()
 standards_loader = StandardsLoader()
-prompt_manager = PromptManager(standards_loader)
+prompt_manager = EnhancedPromptManager(standards_loader)
 
 # Set up Streamlit page
 st.set_page_config(
@@ -37,6 +37,10 @@ st.markdown("""
 This tool helps investment teams generate comprehensive ESG and Impact reports during the pre-investment phase.
 Enter the company information below to generate an analysis based on selected frameworks.
 """)
+
+# Initialize session state for LLM provider if not exists
+if 'llm_provider' not in st.session_state:
+    st.session_state.llm_provider = "OpenAI"
 
 # Input form
 with st.form("company_info_form"):
@@ -64,9 +68,14 @@ with st.form("company_info_form"):
     # Model selection
     model_provider = st.selectbox(
         "Select LLM Provider",
-        ["OpenAI", "Anthropic"],
-        index=0
+        ["OpenAI", "Anthropic", "DeepSeek"],
+        index=0 if st.session_state.llm_provider == "OpenAI" else (1 if st.session_state.llm_provider == "Anthropic" else 2),
+        key="model_provider"
     )
+    
+    # Update session state when provider changes
+    if model_provider != st.session_state.llm_provider:
+        st.session_state.llm_provider = model_provider
     
     if model_provider == "OpenAI":
         model_name = st.selectbox(
@@ -74,10 +83,16 @@ with st.form("company_info_form"):
             ["gpt-4-turbo-preview", "gpt-4", "gpt-3.5-turbo"],
             index=0
         )
-    else:  # Anthropic
+    elif model_provider == "Anthropic":
         model_name = st.selectbox(
             "Select Anthropic Model",
             ["claude-3-opus-20240229", "claude-3-sonnet-20240229", "claude-3-haiku-20240307"],
+            index=0
+        )
+    else:  # DeepSeek
+        model_name = st.selectbox(
+            "Select DeepSeek Model",
+            ["accounts/fireworks/models/deepseek-r1-basic"],
             index=0
         )
     

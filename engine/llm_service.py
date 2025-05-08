@@ -5,6 +5,7 @@ LLM service interface for handling interactions with different LLM providers.
 from abc import ABC, abstractmethod
 from typing import Dict, Optional
 import os
+import requests
 from loguru import logger
 from tenacity import retry, stop_after_attempt, wait_exponential
 
@@ -87,11 +88,52 @@ class AnthropicService(LLMService):
             logger.error(f"Error generating response from Anthropic: {str(e)}")
             raise
 
+class DeepSeekService(LLMService):
+    """DeepSeek LLM service implementation via Fireworks."""
+    
+    def __init__(self, model: str = "accounts/fireworks/models/deepseek-r1-basic", temperature: float = 0.7):
+        self.model = model
+        self.temperature = temperature
+        self.api_key = os.getenv("FIREWORKS_API_KEY")
+        if not self.api_key:
+            raise ValueError("FIREWORKS_API_KEY environment variable not set")
+        
+        self.api_url = "https://api.fireworks.ai/inference/v1/chat/completions"
+        self.headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
+    def generate_response(self, prompt: str, **kwargs) -> str:
+        """Generate a response using DeepSeek via Fireworks API."""
+        try:
+            payload = {
+                "model": self.model,
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": self.temperature,
+                **kwargs
+            }
+            
+            response = requests.post(
+                self.api_url,
+                headers=self.headers,
+                json=payload
+            )
+            response.raise_for_status()
+            
+            return response.json()["choices"][0]["message"]["content"]
+        except Exception as e:
+            logger.error(f"Error generating response from DeepSeek: {str(e)}")
+            raise
+
 def get_llm_service(provider: str = "openai", **kwargs) -> LLMService:
     """Factory function to get the appropriate LLM service."""
     if provider.lower() == "openai":
         return OpenAIService(**kwargs)
     elif provider.lower() == "anthropic":
         return AnthropicService(**kwargs)
+    elif provider.lower() == "deepseek":
+        return DeepSeekService(**kwargs)
     else:
         raise ValueError(f"Unsupported LLM provider: {provider}") 
