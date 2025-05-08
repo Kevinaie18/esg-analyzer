@@ -35,11 +35,17 @@ st.set_page_config(
 
 st.title("ESG & Impact Pre-Investment Analyzer")
 st.markdown("""
-## 🎯 Comment tirer le meilleur parti de l'ESG & Impact Analyzer ?
-- **Répondez de façon précise et synthétique** aux questions-clés du pré-questionnaire : plus vos réponses sont concrètes, plus l'analyse sera pertinente et actionnable.
-- **Ciblez les enjeux business et ESG majeurs** : mettez en avant vos priorités, risques et opportunités pour un rapport sur-mesure.
-- **Utilisez l'outil pour préparer vos comités d'investissement, vos due diligences ou vos plans d'action ESG.**
-- **Astuce :** Pour un rapport le plus utile possible, soyez factuel, mettez en avant vos priorités, et précisez vos attentes d'investissement ou d'impact.
+## 🎯 Conseils d'utilisation
+
+- **Soyez précis et concis** dans vos réponses au pré-questionnaire.
+- **Mettez en avant vos priorités business et ESG** pour un rapport sur-mesure.
+- **Choisissez le modèle LLM** selon la profondeur d'analyse souhaitée:
+
+### Modèles disponibles
+- **GPT-4 Turbo**: Analyse stratégique, contexte complexe.
+- **GPT-3.5 Turbo**: Synthèse rapide, rapports courts.
+- **Claude 3 Opus/Sonnet/Haiku**: Bon équilibre rapidité/qualité.
+- **DeepSeek**: Réponses factuelles, screening rapide.
 
 ---
 
