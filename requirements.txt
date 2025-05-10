@@ -11,4 +11,4 @@ litellm>=1.0.0
 instructor>=0.4.0
 requests>=2.31.0
 PyPDF2==3.0.1
-fireworks-ai==0.1.0 
+fireworks-ai==0.16.1 
