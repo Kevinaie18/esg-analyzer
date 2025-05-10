@@ -27,11 +27,47 @@ load_dotenv()
 
 # Load configuration
 def load_config():
-    with open("config/config.yaml", "r") as f:
-        return yaml.safe_load(f)
+    try:
+        with open("config/config.yaml", "r") as f:
+            return yaml.safe_load(f)
+    except Exception as e:
+        logger.error(f"Error loading config: {str(e)}")
+        st.error("Error loading configuration. Please check the config file.")
+        return None
 
 # Initialize components
 config = load_config()
+if not config:
+    st.stop()
+
+# Validate API keys
+def validate_api_keys():
+    required_keys = {
+        "OpenAI": "OPENAI_API_KEY",
+        "Anthropic": "ANTHROPIC_API_KEY",
+        "DeepSeek": "FIREWORKS_API_KEY"
+    }
+    
+    missing_keys = []
+    for provider, key in required_keys.items():
+        if not os.getenv(key):
+            missing_keys.append(f"{provider} ({key})")
+    
+    if missing_keys:
+        st.error(f"""
+        Missing API keys for: {', '.join(missing_keys)}
+        
+        Please add them to your .env file:
+        ```
+        {chr(10).join([f'{key}=your_api_key_here' for key in required_keys.values()])}
+        ```
+        """)
+        return False
+    return True
+
+if not validate_api_keys():
+    st.stop()
+
 standards_loader = StandardsLoader()
 prompt_manager = EnhancedPromptManager(standards_loader)
 
@@ -105,8 +141,11 @@ with st.form("company_info_form"):
             help="Select the main sector of the project"
         )
         # Filter subsectors based on selected sector
-        relevant_subsectors = [sub for sub in SUBSECTOR_RISK_MAPPING.keys() 
-                             if any(sector.lower() in sub.lower() for sub in [sector])]
+        relevant_subsectors = [
+            sub for sub in SUBSECTOR_RISK_MAPPING.keys()
+            if any(sector.lower() in sub.lower() for sub in [sector])
+            or any(sector.lower() in sub.lower() for sub in SUBSECTOR_RISK_MAPPING[sub].get('parent_sectors', []))
+        ]
         subsector = st.selectbox(
             "Subsector",
             options=relevant_subsectors,
@@ -147,6 +186,7 @@ if submitted:
                     "name": company_name,
                     "country": country,
                     "sector": sector,
+                    "subsector": subsector,
                     "description": description,
                     "size": size if size else None
                 }
