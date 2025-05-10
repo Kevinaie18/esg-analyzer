@@ -296,4 +296,45 @@ def generate_section_prompt(section: str, context: PromptContext) -> str:
         subsector=context.subsector,
         country=context.country,
         operations=context.operations or "Not specified"
-    ) 
+    )
+
+class EnhancedPromptManager:
+    """Manager class for handling enhanced prompts and their generation."""
+    
+    def __init__(self, standards_loader):
+        """Initialize the prompt manager with a standards loader."""
+        self.standards_loader = standards_loader
+
+    def generate_analysis_prompt(self, company_info: Dict, selected_frameworks: List[str], detail_level: str = "standard") -> str:
+        """
+        Generate the main analysis prompt based on company information and selected frameworks.
+        
+        Args:
+            company_info: Dictionary containing company details
+            selected_frameworks: List of selected ESG frameworks
+            detail_level: Level of detail for the analysis ("standard" or "detailed")
+            
+        Returns:
+            str: Formatted prompt for the LLM
+        """
+        context = PromptContext(
+            company_name=company_info["name"],
+            sector=company_info["sector"],
+            subsector=company_info.get("subsector", ""),
+            country=company_info["country"],
+            company_description=company_info["description"],
+            operations=company_info.get("size", ""),
+            additional_context={
+                "frameworks": selected_frameworks,
+                "detail_level": detail_level
+            }
+        )
+        
+        # Generate the master prompt
+        prompt = generate_master_prompt(context)
+        
+        # Add framework-specific context if needed
+        if "ifc" in selected_frameworks:
+            prompt += "\n\nIFC Standards Context:\n" + self.standards_loader.get_ifc_standards()
+        
+        return prompt 

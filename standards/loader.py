@@ -96,4 +96,20 @@ class StandardsLoader:
         standard = self.load_standard(framework)
         if not standard:
             return []
-        return [c for c in standard.criteria if c.pillar == pillar] 
+        return [c for c in standard.criteria if c.pillar == pillar]
+
+    def get_ifc_standards(self) -> str:
+        """Get IFC standards in a formatted string."""
+        ifc_standard = self.load_standard('ifc')
+        if not ifc_standard:
+            return "IFC standards not found."
+            
+        standards_text = f"# IFC Standards ({ifc_standard.version})\n\n"
+        for criterion in ifc_standard.criteria:
+            standards_text += f"## {criterion.id}: {criterion.title}\n"
+            standards_text += f"- Pillar: {criterion.pillar}\n"
+            standards_text += f"- Section: {criterion.section}\n"
+            standards_text += f"- Priority: {criterion.priority}\n"
+            standards_text += f"- Description: {criterion.description}\n\n"
+            
+        return standards_text 
