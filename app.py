@@ -12,6 +12,15 @@ import re
 from standards.loader import StandardsLoader
 from prompts.enhanced_prompts import EnhancedPromptManager
 from engine.llm_service import get_llm_service
+from config.risk_classification import (
+    RISK_CATEGORIES,
+    SECTOR_RISK_MAPPING,
+    SUBSECTOR_RISK_MAPPING,
+    SECTOR_IFC_STANDARDS,
+    IFC_STANDARDS
+)
+from utils.ehs_processor import EHSProcessor
+import json
 
 # Load environment variables
 load_dotenv()
@@ -83,6 +92,80 @@ llm_model = st.selectbox(
 
 st.session_state.llm_provider = llm_provider
 st.session_state.llm_model = llm_model
+
+# Sélection du secteur et sous-secteur
+st.header("1. Classification du Projet")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    sector = st.selectbox(
+        "Secteur Principal",
+        options=list(SECTOR_RISK_MAPPING.keys()),
+        help="Sélectionnez le secteur principal du projet"
+    )
+
+with col2:
+    # Filtrer les sous-secteurs en fonction du secteur principal
+    relevant_subsectors = [sub for sub in SUBSECTOR_RISK_MAPPING.keys() 
+                         if any(sector.lower() in sub.lower() for sub in [sector])]
+    subsector = st.selectbox(
+        "Sous-secteur",
+        options=relevant_subsectors,
+        help="Sélectionnez le sous-secteur spécifique"
+    )
+
+# Déterminer la catégorie de risque
+risk_category = SUBSECTOR_RISK_MAPPING.get(subsector, SECTOR_RISK_MAPPING.get(sector, 'C'))
+risk_info = RISK_CATEGORIES[risk_category]
+
+# Afficher la classification des risques
+st.subheader("Classification des Risques E&S")
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.metric(
+        "Catégorie de Risque",
+        f"{risk_category} - {risk_info['name']}",
+        delta=None,
+        delta_color="normal"
+    )
+
+with col2:
+    st.metric(
+        "Investissement Autorisé",
+        "✅ Oui" if risk_info['investment_allowed'] else "❌ Non",
+        delta=None,
+        delta_color="normal"
+    )
+
+with col3:
+    st.metric(
+        "Due Diligence Requise",
+        risk_info['due_diligence'],
+        delta=None,
+        delta_color="normal"
+    )
+
+# Afficher la description détaillée
+st.info(risk_info['description'])
+
+# Standards IFC applicables
+st.subheader("2. Standards IFC Applicables")
+applicable_standards = SECTOR_IFC_STANDARDS.get(sector, [])
+for standard_num in applicable_standards:
+    st.markdown(f"**Standard {standard_num}**: {IFC_STANDARDS[standard_num]}")
+
+# Recommandations EHS sectorielles
+st.subheader("3. Recommandations EHS Sectorielles")
+ehs_processor = EHSProcessor()
+recommendations = ehs_processor.get_sector_recommendations(sector, subsector)
+
+for category, recs in recommendations.items():
+    if recs:
+        with st.expander(f"Recommandations {category.capitalize()}"):
+            for rec in recs:
+                st.markdown(f"- {rec}")
 
 with st.form("company_info_form"):
     st.subheader("Company Information")
