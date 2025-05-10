@@ -85,6 +85,9 @@ class AnthropicService(LLMService):
         retry_count = 0
         while True:
             try:
+                # Anthropic requires max_tokens to be an int
+                if max_tokens is None:
+                    max_tokens = 1024
                 response = self.client.messages.create(
                     model=self.model,
                     messages=[{"role": "user", "content": prompt}],
@@ -108,27 +111,35 @@ class DeepSeekService(LLMService):
         if not api_key:
             raise ValueError("FIREWORKS_API_KEY environment variable not set")
         self.api_key = api_key
+        self.api_url = "https://api.fireworks.ai/inference/v1/chat/completions"
         
     def generate_response(self, prompt: str, max_tokens: Optional[int] = None) -> str:
-        """Generate a response using DeepSeek via Fireworks API."""
+        """Generate a response using DeepSeek via Fireworks API (direct HTTP)."""
         retry_count = 0
+        if max_tokens is None:
+            max_tokens = 2048
         while True:
             try:
-                # Remove proxies from kwargs if present
-                kwargs = {
+                headers = {
+                    "Authorization": f"Bearer {self.api_key}",
+                    "Content-Type": "application/json"
+                }
+                payload = {
                     "model": self.model,
                     "messages": [{"role": "user", "content": prompt}],
                     "temperature": self.temperature,
-                    "max_tokens": max_tokens,
-                    "api_key": self.api_key
+                    "max_tokens": max_tokens
                 }
-                kwargs.pop('proxies', None)  # Remove proxies if present
-                
-                response = completion(**kwargs)
-                return response.choices[0].message.content
-            except litellm.RateLimitError:
-                self._handle_rate_limit(retry_count)
-                retry_count += 1
+                response = requests.post(self.api_url, headers=headers, json=payload, timeout=60)
+                response.raise_for_status()
+                data = response.json()
+                return data["choices"][0]["message"]["content"]
+            except requests.exceptions.HTTPError as e:
+                logger.error(f"HTTP error from Fireworks API: {e} - {getattr(e.response, 'text', '')}")
+                raise
+            except requests.exceptions.RequestException as e:
+                logger.error(f"Request error from Fireworks API: {e}")
+                raise
             except Exception as e:
                 logger.error(f"Error generating response: {str(e)}")
                 raise
