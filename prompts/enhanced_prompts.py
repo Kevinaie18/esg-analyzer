@@ -1,352 +1,299 @@
 """
-Enhanced prompt templates for actionable ESG and Impact analysis with dynamic sector adaptation.
+Enhanced prompts for ESG & Impact analysis report generation.
+This module contains the master prompt template and section-specific sub-prompts
+for generating structured ESG & Impact pre-investment analysis reports.
 """
 
 from typing import Dict, List, Optional
-from jinja2 import Template
-from loguru import logger
-from standards.loader import StandardsLoader, StandardCriterion
+from dataclasses import dataclass
 
-# Example sector-specific prompt blocks (expand as needed)
-SECTOR_PROMPT_BLOCKS = {
-    "Agribusiness": """
-### SECTOR-SPECIFIC FOCUS: AGRIBUSINESS
-
-INDUSTRY BEST PRACTICES:
-- Water Management:
-  * Efficient irrigation systems
-  * Water recycling programs
-  * Rainwater harvesting
-  * Water usage monitoring
-  * Drought-resistant crops
-- Soil Conservation:
-  * Crop rotation practices
-  * Organic farming methods
-  * Regular soil testing
-  * Erosion control measures
-  * Sustainable land management
-- Labor Standards:
-  * Fair wages and working conditions
-  * Training programs
-  * Health and safety protocols
-  * Worker housing standards
-  * Child labor prevention
-- Supply Chain:
-  * Traceability systems
-  * Smallholder inclusion
-  * Fair trade practices
-  * Local sourcing
-  * Quality control
-- Pay special attention to land use, biodiversity, water management, supply chain traceability, and labor rights in rural areas.
-- Highlight SDGs 2, 12, 15, and relevant IFC PS6, PS1, and local agricultural standards.
-- Identify risks related to deforestation, pesticide use, and smallholder inclusion.
-""",
-    "Manufacturing": """
-### SECTOR-SPECIFIC FOCUS: MANUFACTURING
-
-INDUSTRY BEST PRACTICES:
-- Energy Efficiency:
-  * Renewable energy adoption
-  * Energy audits and monitoring
-  * Smart metering systems
-  * Energy-efficient equipment
-  * Heat recovery systems
-- Waste Management:
-  * Circular economy practices
-  * Recycling programs
-  * Hazardous waste handling
-  * Zero waste initiatives
-  * By-product valorization
-- Worker Safety:
-  * Safety training programs
-  * PPE requirements
-  * Emergency procedures
-  * Regular safety audits
-  * Incident reporting system
-- Supply Chain:
-  * Supplier ESG assessment
-  * Local procurement
-  * Quality control systems
-  * Traceability protocols
-  * Ethical sourcing
-- Focus on resource efficiency, emissions, waste management, occupational health & safety, and supply chain labor standards.
-- Highlight SDGs 9, 12, 13, and relevant IFC PS2, PS3, PS6, and ISO standards.
-- Identify risks related to hazardous materials, energy use, and labor conditions.
-""",
-    "Services": """
-### SECTOR-SPECIFIC FOCUS: SERVICES
-
-INDUSTRY BEST PRACTICES:
-- Data Privacy & Security:
-  * GDPR compliance
-  * Data encryption
-  * Access controls
-  * Regular security audits
-  * Incident response plan
-- Customer Experience:
-  * Service quality metrics
-  * Customer feedback system
-  * Accessibility features
-  * Fair pricing policy
-  * Complaint resolution
-- Digital Inclusion:
-  * Universal access
-  * Digital literacy programs
-  * Adaptive technologies
-  * Multi-language support
-  * Rural connectivity
-- Workplace Culture:
-  * Diversity & inclusion
-  * Mental health support
-  * Flexible working
-  * Career development
-  * Equal pay policy
-- Emphasize data privacy, customer well-being, gender equality, and indirect environmental impacts (e.g., energy use in IT).
-- Highlight SDGs 5, 8, 9, and relevant IFC PS2, PS4, and digital sector codes.
-- Identify risks related to gender disparity, digital inclusion, and E&S management systems.
-""",
-    "Healthcare": """
-### SECTOR-SPECIFIC FOCUS: HEALTHCARE
-
-INDUSTRY BEST PRACTICES:
-- Patient Safety:
-  * Clinical protocols
-  * Infection control
-  * Medical equipment safety
-  * Staff training programs
-  * Incident reporting
-- Healthcare Access:
-  * Affordable pricing
-  * Insurance partnerships
-  * Telemedicine services
-  * Community outreach
-  * Emergency protocols
-- Medical Ethics:
-  * Patient privacy
-  * Informed consent
-  * Clinical trials ethics
-  * End-of-life care
-  * Data protection
-- Quality Control:
-  * Accreditation compliance
-  * Regular audits
-  * Outcome tracking
-  * Patient feedback
-  * Staff certification
-- Focus on patient safety, access to healthcare, supply chain ethics, and waste management (medical waste).
-- Highlight SDGs 3, 5, 10, and relevant IFC PS2, PS4, and healthcare regulations.
-- Identify risks related to access, affordability, and regulatory compliance.
-"""
+# Icons and visual elements
+ICONS = {
+    "high_risk": "🔴",
+    "medium_risk": "🟠",
+    "low_risk": "🟡",
+    "minimal_risk": "🟢",
+    "sdg": "🌍",
+    "impact": "💫",
+    "stakeholder": "👥",
+    "check": "✅",
+    "warning": "⚠️",
+    "info": "ℹ️",
 }
 
-class EnhancedPromptManager:
-    """Manages the generation and assembly of enhanced prompts for ESG analysis, with dynamic sector adaptation."""
-    
-    def __init__(self, standards_loader: StandardsLoader):
-        self.standards_loader = standards_loader
-        
-    def _get_criteria_text(self, criteria: List[StandardCriterion]) -> str:
-        """Convert criteria to formatted text with priority indicators."""
-        return "\n".join([
-            f"- {c.id}: {c.title} ({c.priority.upper()} priority)\n  {c.description}"
-            for c in criteria
-        ])
+# Color codes for risk levels
+RISK_COLORS = {
+    "Cat A": "red",
+    "Cat B+": "orange",
+    "Cat B-": "yellow",
+    "Cat C": "green",
+}
 
-    def _get_sector_prompt_block(self, sector: str) -> str:
-        """Return sector-specific prompt block if available."""
-        return SECTOR_PROMPT_BLOCKS.get(sector, "")
+# Master prompt template
+MASTER_PROMPT_TEMPLATE = """
+You are an expert ESG & Impact analyst for an African impact investment fund (IPAE3).
+Your task is to generate a structured ESG & Impact pre-investment analysis report.
 
-    def generate_analysis_prompt(
-        self,
-        company_info: Dict,
-        selected_frameworks: List[str],
-        detail_level: str = "standard"
-    ) -> str:
-        """Generate the actionable main analysis prompt, dynamically adapted to sector, size, and geography."""
-        
-        # Load selected standards
-        standards = {
-            fw: self.standards_loader.load_standard(fw)
-            for fw in selected_frameworks
-        }
-        
-        # Extract criteria by pillar
-        criteria_by_pillar = {
-            pillar: []
-            for pillar in ['E', 'S', 'G']
-        }
-        
-        for standard in standards.values():
-            if standard:
-                for criterion in standard.criteria:
-                    criteria_by_pillar[criterion.pillar].append(criterion)
-        
-        # Get sector-specific block
-        sector_block = self._get_sector_prompt_block(company_info.get("sector", ""))
-        
-        # Generate the actionable prompt template
-        template = Template("""
-You are an expert ESG and Impact analyst. Your task is to extract actionable, investment-relevant insights for the following company. Focus on identifying the most critical ESG and impact issues, referencing specific standards and frameworks.
-
-COMPANY INFORMATION:
-Name: {{ company_info.name }}
-Country: {{ company_info.country }}
-Sector: {{ company_info.sector }}
-Description: {{ company_info.description }}
-{% if company_info.size %}
-Size: {{ company_info.size }}
-{% endif %}
-
-ANALYSIS FRAMEWORKS:
-{% for framework in selected_frameworks %}
-- {{ framework.upper() }}
-{% endfor %}
-
-RELEVANT CRITERIA:
-
-ENVIRONMENTAL (E):
-{{ criteria_e }}
-
-SOCIAL (S):
-{{ criteria_s }}
-
-GOVERNANCE (G):
-{{ criteria_g }}
-
-{{ sector_block }}
-
----
+# REQUIRED OUTPUT FORMAT
+Your report must strictly follow this structure:
 
 # ACTIONABLE INSIGHTS REPORT
 
-## 1. E&S CLASSIFICATION
-- Determine the risk category based on the company's sector and activities
-- Explain the rationale for the risk classification
-- Detail the investment implications and due diligence requirements
-- Provide specific recommendations for risk mitigation
+## 1. SUMMARY DASHBOARD
+- Create a concise, visual summary dashboard that displays at a glance:
+ * E&S Risk Classification (with color-coding: Red for Cat A, Orange for Cat B+, Yellow for Cat B-, Green for Cat C)
+ * External DD Required (Yes/No)
+ * Top 3 Applicable IFC Standards (numbered list)
+ * Primary Sector-Specific Risks (bullet points)
+ * IPAE3 Impact Alignment Score (visual gauge or percentage)
+ * Key SDG Contributions (using SDG icons)
+ * 2X Challenge Eligibility (Yes/Partial/No)
+ * Top 3 Due Diligence Priorities (numbered list)
+- This dashboard must be highly visual, compact (maximum half-page), and instantly informative
+- Use tables, icons, and color-coding for maximum clarity
 
-## 2. APPLICABLE STANDARDS
-- List and explain the relevant IFC Performance Standards for this company
-- Identify other applicable industry standards and guidelines
+## 2. E&S CLASSIFICATION
+- Based on the sector and subsector, provide the associated risk level (Cat A, Cat B+, Cat B-, Cat C)
+- Determine if there is a need to perform external due diligence
+- If Category A, clearly flag that IPAE3 cannot invest in this project
+
+## 3. E&S IFC ANALYSIS
+### 3.A APPLICABLE STANDARDS
+- List the relevant IFC Performance Standards for this company
 - For each standard:
-  * Explain why it applies to this company
-  * Highlight key requirements and compliance needs
-  * Suggest implementation priorities
+ * Explain why it applies to this company
+ * Highlight key risks and opportunities associated
+ * Suggest implementation priorities
 
-## 3. SECTORIAL RECOMMENDATIONS
-- Provide sector-specific EHS recommendations
+### 3.B SECTORIAL RECOMMENDATIONS
+- Provide sector-specific EHS recommendations from IFC guidelines
 - Include best practices for:
-  * Environmental management
-  * Health and safety
-  * Social impact
+ * Environmental management
+ * Health and safety
+ * Social impact
 - Prioritize recommendations based on risk level and feasibility
 
-## 4. SDG ALIGNMENT
-- Which specific UN Sustainable Development Goals (SDGs) does the company contribute to?
-- For each SDG, explain HOW the company contributes (reference business activities, products, or services).
-- Use SDG icons or numbers for clarity.
+### 3.C OTHER SECTOR-SPECIFIC STANDARDS & RISKS
+- Identify important industry-specific standards, guidelines, or corrective measures (e.g., SASB, GRI, ISO, local codes)
+- List the top 3 sector-specific ESG risks and the standards that address them
+- For each, explain the connection to the company's business model
 
-## 5. IFC PERFORMANCE STANDARDS
-- Which IFC Performance Standards are most relevant to this company's operations? List the top 3-5.
-- For each, explain WHY it applies (reference company activities, sector, geography, or risks).
-- If any standards are not relevant, briefly state why.
-
-## 6. SECTOR-SPECIFIC STANDARDS & RISKS
-- Identify the most important industry-specific standards, guidelines, or corrective measures for this company (e.g., SASB, GRI, ISO, local codes).
-- List the top 3 sector-specific ESG risks and the standards that address them.
-- For each, explain the connection to the company's business model.
-
-## 7. IPAE3 IMPACT FRAMEWORK ALIGNMENT
-- Assess the company's alignment with the following impact pillars:
-  - Local entrepreneurship
-  - Decent jobs & job creation
-  - Gender lens & empowerment
-  - Climate action & resilience
-- For each pillar, provide a clear assessment (aligned/partially aligned/not aligned) and justification.
-
-## 8. 2X CHALLENGE CRITERIA (if applicable)
-- Score the company against the 2X Challenge criteria (0-2 scale: 0=not met, 1=partially met, 2=fully met).
-- For each criterion, provide a brief justification.
-
-## 9. STAKEHOLDER ENGAGEMENT ANALYSIS
+## 4. STAKEHOLDER ENGAGEMENT ANALYSIS
 - Map key stakeholders and their influence:
-  * Internal: Management, Employees, Board
-  * External: Customers, Suppliers, Community, Regulators
+ * Internal: Management, Employees, Board
+ * External: Customers, Suppliers, Community, Regulators
 - For each stakeholder group:
-  * Current engagement level (High/Medium/Low)
-  * Key concerns and expectations
-  * Potential risks and opportunities
+ * Current engagement level (High/Medium/Low)
+ * Key concerns and expectations
+ * Potential risks and opportunities
 - Initial engagement recommendations:
-  * Priority stakeholders for immediate engagement
-  * Key topics to address
-  * Suggested engagement methods
-  * Timeline for engagement
-  * Success metrics
+ * Priority stakeholders for immediate engagement
+ * Key topics to address
+ * Suggested engagement methods
+ * Timeline for engagement
+ * Success metrics
 
-## 10. SUMMARY DASHBOARD
-- Create a summary table showing:
-  - Risk category and key implications
-  - Applicable standards and compliance status
-  - SDGs addressed (with icons/numbers)
-  - Key sector standards
-  - IPAE3 pillar alignment (with color-coded status)
-  - 2X Challenge scores
+## 5. IMPACT ANALYSIS
 
-## 11. DUE DILIGENCE ACTION CHECKLIST
-- List the top 5-10 specific due diligence questions or actions for the investment team, derived from the standards and risks identified above.
-- Make each item actionable and reference the relevant standard or risk.
+### 5.A IPAE3 IMPACT FRAMEWORK ALIGNMENT
+- Assess the company's alignment with the following impact pillars:
+ * Local entrepreneurship
+ * Decent jobs & job creation
+ * Gender lens & empowerment
+ * Climate action & resilience
+- For each pillar, provide a clear assessment (aligned/partially aligned/not aligned) and justification
 
----
+### 5.B SDG ALIGNMENT
+- Identify specific UN Sustainable Development Goals (SDGs) the company contributes to
+- For each SDG, explain HOW the company contributes (reference business activities, products, or services)
+- Use SDG icons or numbers for clarity
 
-**Instructions:**
-- Be concise, specific, and actionable.
-- Reference standards and frameworks directly (use numbers, icons, or color codes where possible).
-- Justify all matches and scores.
-- Lead with the summary dashboard and action checklist.
-- Avoid generic analysis; focus on what matters most for investment decision-making.
-""")
+### 5.C 2X CHALLENGE CRITERIA (if applicable)
+- Score the company against the 2X Challenge criteria (0-2 scale: 0=not met, 1=partially met, 2=fully met)
+- For each criterion, provide a brief justification
+
+## 6. DUE DILIGENCE ACTION CHECKLIST
+- List the top 5-10 specific due diligence questions or actions for the investment team
+- Make each item actionable and reference the relevant standard or risk
+
+# ANALYSIS APPROACH
+
+For the Summary Dashboard:
+- Make it extremely concise and scannable in under 10 seconds
+- Use tables, icons, and visual indicators
+- Present only the most critical information
+- Be concrete and specific in your assessments
+
+For E&S Classification:
+- Base classification on IFC EHS Guidelines for the specific sector
+- Consider both direct and indirect impacts
+- Factor in country-specific risk factors
+- Document the rationale for the classification
+
+For IFC Analysis:
+- Focus on standards that are most relevant to the company's operations
+- Prioritize standards based on potential impact severity
+- Consider both current and future operations
+- Reference specific IFC guidelines and requirements
+
+For Stakeholder Analysis:
+- Identify all relevant stakeholder groups
+- Assess current engagement levels
+- Consider cultural and local context
+- Prioritize based on influence and impact
+
+For Impact Analysis:
+- Use concrete metrics where possible
+- Consider both direct and indirect impacts
+- Assess alignment with IPAE3's impact goals
+- Document evidence for each assessment
+
+# COMPANY INFORMATION
+Company Name: {company_name}
+Sector: {sector}
+Subsector: {subsector}
+Country: {country}
+Company Description: {company_description}
+
+# REFERENCE FRAMEWORKS
+- IFC Performance Standards
+- IFC EHS Guidelines
+- UN Sustainable Development Goals
+- 2X Challenge Criteria
+- IPAE3 Impact Framework
+"""
+
+# Section-specific sub-prompts
+SUMMARY_DASHBOARD_PROMPT = """
+Generate a concise, visual summary dashboard for {company_name} that includes:
+1. E&S Risk Classification with color coding
+2. External DD requirement status
+3. Top 3 applicable IFC Standards
+4. Primary sector-specific risks
+5. IPAE3 Impact Alignment Score
+6. Key SDG Contributions
+7. 2X Challenge Eligibility
+8. Top 3 Due Diligence Priorities
+
+Use tables, icons, and color-coding for maximum clarity.
+Keep the dashboard to a maximum of half a page.
+"""
+
+ES_CLASSIFICATION_PROMPT = """
+Based on the following information, determine the E&S Classification for {company_name}:
+- Sector: {sector}
+- Subsector: {subsector}
+- Country: {country}
+- Operations: {operations}
+
+Provide:
+1. Risk Classification (Cat A/B+/B-/C)
+2. External DD requirement
+3. Justification for the classification
+4. Key risk factors considered
+"""
+
+IFC_ANALYSIS_PROMPT = """
+Analyze the applicability of IFC Performance Standards for {company_name}:
+1. List relevant standards
+2. For each standard:
+   - Explain applicability
+   - Identify key risks
+   - Suggest implementation priorities
+3. Provide sector-specific EHS recommendations
+4. Identify other relevant standards and guidelines
+
+Reference: IFC EHS Guidelines for {sector}
+"""
+
+STAKEHOLDER_ANALYSIS_PROMPT = """
+Map and analyze stakeholders for {company_name}:
+1. Internal stakeholders:
+   - Management
+   - Employees
+   - Board
+2. External stakeholders:
+   - Customers
+   - Suppliers
+   - Community
+   - Regulators
+
+For each group:
+- Current engagement level
+- Key concerns
+- Potential risks/opportunities
+- Recommended engagement approach
+"""
+
+IMPACT_ANALYSIS_PROMPT = """
+Assess {company_name}'s impact alignment:
+1. IPAE3 Impact Framework:
+   - Local entrepreneurship
+   - Decent jobs & job creation
+   - Gender lens & empowerment
+   - Climate action & resilience
+
+2. SDG Alignment:
+   - Identify relevant SDGs
+   - Explain contribution mechanisms
+   - Provide evidence
+
+3. 2X Challenge Criteria:
+   - Score each criterion (0-2)
+   - Justify scores
+   - Identify gaps
+"""
+
+DD_CHECKLIST_PROMPT = """
+Generate a due diligence action checklist for {company_name}:
+1. List 5-10 specific actions/questions
+2. Reference relevant standards/risks
+3. Prioritize based on:
+   - Risk level
+   - Impact severity
+   - Implementation feasibility
+4. Include timeline recommendations
+"""
+
+@dataclass
+class PromptContext:
+    """Context data for prompt generation."""
+    company_name: str
+    sector: str
+    subsector: str
+    country: str
+    company_description: str
+    operations: Optional[str] = None
+    additional_context: Optional[Dict] = None
+
+def generate_master_prompt(context: PromptContext) -> str:
+    """Generate the master prompt with the provided context."""
+    return MASTER_PROMPT_TEMPLATE.format(
+        company_name=context.company_name,
+        sector=context.sector,
+        subsector=context.subsector,
+        country=context.country,
+        company_description=context.company_description
+    )
+
+def generate_section_prompt(section: str, context: PromptContext) -> str:
+    """Generate a section-specific prompt."""
+    prompts = {
+        "summary": SUMMARY_DASHBOARD_PROMPT,
+        "es_classification": ES_CLASSIFICATION_PROMPT,
+        "ifc_analysis": IFC_ANALYSIS_PROMPT,
+        "stakeholder": STAKEHOLDER_ANALYSIS_PROMPT,
+        "impact": IMPACT_ANALYSIS_PROMPT,
+        "dd_checklist": DD_CHECKLIST_PROMPT
+    }
+    
+    if section not in prompts:
+        raise ValueError(f"Unknown section: {section}")
         
-        # Render the template
-        prompt = template.render(
-            company_info=company_info,
-            selected_frameworks=selected_frameworks,
-            criteria_e=self._get_criteria_text(criteria_by_pillar['E']),
-            criteria_s=self._get_criteria_text(criteria_by_pillar['S']),
-            criteria_g=self._get_criteria_text(criteria_by_pillar['G']),
-            sector_block=sector_block
-        )
-        
-        return prompt
-
-    def generate_docx_template(self) -> str:
-        """Generate the template for DOCX export formatting."""
-        return """
-DOCX FORMATTING INSTRUCTIONS:
-
-1. Document Structure
-   - Title: Company Name - ESG & Impact Analysis
-   - Executive Summary: 1 page
-   - Table of Contents
-   - Main sections with clear headings
-   - Appendices for detailed criteria
-
-2. Formatting Guidelines
-   - Headings: Arial, 14pt, Bold
-   - Subheadings: Arial, 12pt, Bold
-   - Body text: Arial, 11pt
-   - Tables: Arial, 10pt
-   - Colors: Use IPAE3 brand colors for highlights
-
-3. Tables and Visualizations
-   - Business activities breakdown
-   - ESG risk matrix
-   - Impact alignment scoring
-   - Climate vulnerability assessment
-   - Cross-activity comparison
-
-4. Appendices
-   - Detailed criteria assessment
-   - Risk scoring methodology
-   - Impact metrics definitions
-   - Climate analysis methodology
-""" 
+    return prompts[section].format(
+        company_name=context.company_name,
+        sector=context.sector,
+        subsector=context.subsector,
+        country=context.country,
+        operations=context.operations or "Not specified"
+    ) 
