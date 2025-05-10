@@ -93,90 +93,6 @@ llm_model = st.selectbox(
 st.session_state.llm_provider = llm_provider
 st.session_state.llm_model = llm_model
 
-# Sélection du secteur et sous-secteur
-st.header("1. Classification du Projet")
-
-col1, col2 = st.columns(2)
-
-with col1:
-    sector = st.selectbox(
-        "Secteur Principal",
-        options=list(SECTOR_RISK_MAPPING.keys()),
-        help="Sélectionnez le secteur principal du projet"
-    )
-
-with col2:
-    # Filtrer les sous-secteurs en fonction du secteur principal
-    relevant_subsectors = [sub for sub in SUBSECTOR_RISK_MAPPING.keys() 
-                         if any(sector.lower() in sub.lower() for sub in [sector])]
-    subsector = st.selectbox(
-        "Sous-secteur",
-        options=relevant_subsectors,
-        help="Sélectionnez le sous-secteur spécifique"
-    )
-
-# Déterminer la catégorie de risque
-risk_category = SUBSECTOR_RISK_MAPPING.get(subsector, SECTOR_RISK_MAPPING.get(sector, 'C'))
-risk_info = RISK_CATEGORIES[risk_category]
-
-# Afficher la classification des risques
-st.subheader("Classification des Risques E&S")
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.metric(
-        "Catégorie de Risque",
-        f"{risk_category} - {risk_info['name']}",
-        delta=None,
-        delta_color="normal"
-    )
-
-with col2:
-    st.metric(
-        "Investissement Autorisé",
-        "✅ Oui" if risk_info['investment_allowed'] else "❌ Non",
-        delta=None,
-        delta_color="normal"
-    )
-
-with col3:
-    st.metric(
-        "Due Diligence Requise",
-        risk_info['due_diligence'],
-        delta=None,
-        delta_color="normal"
-    )
-
-# Afficher la description détaillée
-st.info(risk_info['description'])
-
-# Standards IFC applicables
-st.subheader("2. Standards IFC Applicables")
-applicable_standards = SECTOR_IFC_STANDARDS.get(sector, [])
-for standard_num in applicable_standards:
-    st.markdown(f"**Standard {standard_num}**: {IFC_STANDARDS[standard_num]}")
-
-# Recommandations EHS sectorielles
-st.subheader("3. Recommandations EHS Sectorielles")
-ehs_processor = EHSProcessor()
-recommendations = ehs_processor.get_sector_recommendations(sector, subsector)
-
-if not any(recommendations.values()):
-    st.warning("""
-    ⚠️ Aucune directive EHS n'est disponible pour le moment.
-    
-    Pour activer les recommandations EHS sectorielles :
-    1. Créez un dossier `ifc-ehs` à la racine du projet
-    2. Placez-y les fichiers PDF des directives EHS IFC
-    3. Redémarrez l'application
-    """)
-else:
-    for category, recs in recommendations.items():
-        if recs:
-            with st.expander(f"Recommandations {category.capitalize()}"):
-                for rec in recs:
-                    st.markdown(f"- {rec}")
-
 with st.form("company_info_form"):
     st.subheader("Company Information")
     col1, col2 = st.columns(2)
@@ -185,7 +101,16 @@ with st.form("company_info_form"):
         country = st.text_input("Country of Operation")
         sector = st.selectbox(
             "Sector",
-            ["Agribusiness", "Manufacturing", "Services", "Healthcare", "Other"]
+            options=list(SECTOR_RISK_MAPPING.keys()),
+            help="Select the main sector of the project"
+        )
+        # Filter subsectors based on selected sector
+        relevant_subsectors = [sub for sub in SUBSECTOR_RISK_MAPPING.keys() 
+                             if any(sector.lower() in sub.lower() for sub in [sector])]
+        subsector = st.selectbox(
+            "Subsector",
+            options=relevant_subsectors,
+            help="Select the specific subsector"
         )
     with col2:
         size = st.text_input("Company Size (optional)", placeholder="e.g., Revenue, Number of Employees")
@@ -234,8 +159,12 @@ if submitted:
                     prompt,
                     max_tokens=config["llm"]["max_tokens"]
                 )
+                
+                # Display the analysis results
                 st.markdown("## Analysis Results")
                 st.markdown(response)
+
+                # Download button for the report
                 st.download_button(
                     label="Download Report",
                     data=response,

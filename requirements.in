@@ -1,0 +1,29 @@
+# Core dependencies
+streamlit
+jinja2
+pyyaml
+python-docx
+loguru
+pydantic
+python-dotenv
+
+# LLM providers
+openai
+anthropic
+litellm
+instructor
+fireworks-ai
+
+# Utilities
+requests
+PyPDF2
+tqdm
+rich
+tenacity
+
+# Development dependencies
+pytest
+black
+isort
+flake8
+mypy 

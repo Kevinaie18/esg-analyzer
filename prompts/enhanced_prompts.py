@@ -219,22 +219,44 @@ GOVERNANCE (G):
 
 # ACTIONABLE INSIGHTS REPORT
 
-## 1. SDG ALIGNMENT
+## 1. E&S CLASSIFICATION
+- Determine the risk category based on the company's sector and activities
+- Explain the rationale for the risk classification
+- Detail the investment implications and due diligence requirements
+- Provide specific recommendations for risk mitigation
+
+## 2. APPLICABLE STANDARDS
+- List and explain the relevant IFC Performance Standards for this company
+- Identify other applicable industry standards and guidelines
+- For each standard:
+  * Explain why it applies to this company
+  * Highlight key requirements and compliance needs
+  * Suggest implementation priorities
+
+## 3. SECTORIAL RECOMMENDATIONS
+- Provide sector-specific EHS recommendations
+- Include best practices for:
+  * Environmental management
+  * Health and safety
+  * Social impact
+- Prioritize recommendations based on risk level and feasibility
+
+## 4. SDG ALIGNMENT
 - Which specific UN Sustainable Development Goals (SDGs) does the company contribute to?
 - For each SDG, explain HOW the company contributes (reference business activities, products, or services).
 - Use SDG icons or numbers for clarity.
 
-## 2. IFC PERFORMANCE STANDARDS
+## 5. IFC PERFORMANCE STANDARDS
 - Which IFC Performance Standards are most relevant to this company's operations? List the top 3-5.
 - For each, explain WHY it applies (reference company activities, sector, geography, or risks).
 - If any standards are not relevant, briefly state why.
 
-## 3. SECTOR-SPECIFIC STANDARDS & RISKS
+## 6. SECTOR-SPECIFIC STANDARDS & RISKS
 - Identify the most important industry-specific standards, guidelines, or corrective measures for this company (e.g., SASB, GRI, ISO, local codes).
 - List the top 3 sector-specific ESG risks and the standards that address them.
 - For each, explain the connection to the company's business model.
 
-## 4. IPAE3 IMPACT FRAMEWORK ALIGNMENT
+## 7. IPAE3 IMPACT FRAMEWORK ALIGNMENT
 - Assess the company's alignment with the following impact pillars:
   - Local entrepreneurship
   - Decent jobs & job creation
@@ -242,11 +264,11 @@ GOVERNANCE (G):
   - Climate action & resilience
 - For each pillar, provide a clear assessment (aligned/partially aligned/not aligned) and justification.
 
-## 5. 2X CHALLENGE CRITERIA (if applicable)
+## 8. 2X CHALLENGE CRITERIA (if applicable)
 - Score the company against the 2X Challenge criteria (0-2 scale: 0=not met, 1=partially met, 2=fully met).
 - For each criterion, provide a brief justification.
 
-## 6. STAKEHOLDER ENGAGEMENT ANALYSIS
+## 9. STAKEHOLDER ENGAGEMENT ANALYSIS
 - Map key stakeholders and their influence:
   * Internal: Management, Employees, Board
   * External: Customers, Suppliers, Community, Regulators
@@ -261,15 +283,16 @@ GOVERNANCE (G):
   * Timeline for engagement
   * Success metrics
 
-## 7. SUMMARY DASHBOARD
+## 10. SUMMARY DASHBOARD
 - Create a summary table showing:
+  - Risk category and key implications
+  - Applicable standards and compliance status
   - SDGs addressed (with icons/numbers)
-  - Relevant IFC standards
   - Key sector standards
   - IPAE3 pillar alignment (with color-coded status)
   - 2X Challenge scores
 
-## 7. DUE DILIGENCE ACTION CHECKLIST
+## 11. DUE DILIGENCE ACTION CHECKLIST
 - List the top 5-10 specific due diligence questions or actions for the investment team, derived from the standards and risks identified above.
 - Make each item actionable and reference the relevant standard or risk.
 
