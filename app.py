@@ -8,6 +8,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from loguru import logger
 import re
+import io
 
 from standards.loader import StandardsLoader
 from prompts.enhanced_prompts import EnhancedPromptManager
@@ -21,6 +22,8 @@ from config.risk_classification import (
 )
 from utils.ehs_processor import EHSProcessor
 import json
+from formatters.docx_formatter import DocxFormatter
+from utils.llm_report_parser import parse_llm_report
 
 # Load environment variables
 load_dotenv()
@@ -204,9 +207,26 @@ if submitted:
                 st.markdown("## Analysis Results")
                 st.markdown(response)
 
-                # Download button for the report
+                # DOCX export
+                try:
+                    parsed = parse_llm_report(response, company_name)
+                    docx_formatter = DocxFormatter()
+                    docx_formatter.format_analysis(parsed)
+                    docx_buffer = io.BytesIO()
+                    docx_formatter.document.save(docx_buffer)
+                    docx_buffer.seek(0)
+                    st.download_button(
+                        label="Download Report as Word (.docx)",
+                        data=docx_buffer,
+                        file_name=f"esg_analysis_{company_name.lower().replace(' ', '_')}.docx",
+                        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    )
+                except Exception as docx_err:
+                    st.warning(f"Could not generate Word report: {docx_err}")
+
+                # Markdown fallback
                 st.download_button(
-                    label="Download Report",
+                    label="Download Report as Markdown",
                     data=response,
                     file_name=f"esg_analysis_{company_name.lower().replace(' ', '_')}.md",
                     mime="text/markdown"
