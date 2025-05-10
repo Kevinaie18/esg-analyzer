@@ -20,10 +20,8 @@ from tenacity import (
     retry_if_exception_type
 )
 from functools import lru_cache
-import openai
-from openai import OpenAI
-import anthropic
-from anthropic import Anthropic
+import litellm
+from litellm import completion
 import tomli
 from datetime import datetime
 
@@ -58,6 +56,17 @@ class ProviderType(Enum):
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
     DEEPSEEK = "deepseek"
+
+# Model name mappings
+MODEL_MAPPINGS = {
+    "gpt-4-turbo-preview": "gpt-4-turbo-preview",
+    "gpt-4": "gpt-4",
+    "gpt-3.5-turbo": "gpt-3.5-turbo",
+    "claude-3-opus-20240229": "claude-3-opus-20240229",
+    "claude-3-sonnet-20240229": "claude-3-sonnet-20240229",
+    "claude-3-haiku-20240307": "claude-3-haiku-20240307",
+    "accounts/fireworks/models/deepseek-r1-basic": "deepseek-chat"
+}
 
 @dataclass
 class ProviderConfig:
@@ -121,12 +130,12 @@ class LLMService(ABC):
         time.sleep(delay)
 
 class OpenAIService(LLMService):
-    """OpenAI LLM service implementation."""
+    """OpenAI LLM service implementation using litellm."""
     
     def _setup_client(self) -> None:
         """Set up the OpenAI client."""
         try:
-            self.client = OpenAI(api_key=self.config.api_key)
+            os.environ["OPENAI_API_KEY"] = self.config.api_key
             logger.info("Successfully initialized OpenAI client")
         except Exception as e:
             logger.error(f"Failed to initialize OpenAI client: {str(e)}")
@@ -143,10 +152,10 @@ class OpenAIService(LLMService):
         max_tokens: Optional[int] = None,
         temperature: Optional[float] = None
     ) -> str:
-        """Generate a response using OpenAI's API."""
+        """Generate a response using OpenAI's API via litellm."""
         start_time = time.time()
         try:
-            response = self.client.chat.completions.create(
+            response = completion(
                 model=self.config.model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=temperature or self.config.temperature,
@@ -171,7 +180,7 @@ class OpenAIService(LLMService):
             
             return response.choices[0].message.content
             
-        except openai.RateLimitError as e:
+        except litellm.RateLimitError as e:
             self._log_metrics(
                 prompt_tokens=0,
                 completion_tokens=0,
@@ -193,14 +202,9 @@ class OpenAIService(LLMService):
             raise
     
     def count_tokens(self, text: str) -> int:
-        """Count tokens using OpenAI's tokenizer."""
+        """Count tokens using litellm's tokenizer."""
         try:
-            response = self.client.chat.completions.create(
-                model=self.config.model,
-                messages=[{"role": "user", "content": text}],
-                max_tokens=1
-            )
-            return response.usage.prompt_tokens
+            return litellm.token_counter(model=self.config.model, text=text)
         except Exception as e:
             logger.error(f"Error counting tokens: {str(e)}")
             raise
@@ -233,6 +237,7 @@ class OpenAIService(LLMService):
         """Calculate the cost of the request."""
         # OpenAI's pricing per 1K tokens (as of 2024)
         PRICING = {
+            "gpt-4-turbo-preview": {"prompt": 0.01, "completion": 0.03},
             "gpt-4": {"prompt": 0.03, "completion": 0.06},
             "gpt-3.5-turbo": {"prompt": 0.0015, "completion": 0.002}
         }
@@ -246,12 +251,12 @@ class OpenAIService(LLMService):
         return prompt_cost + completion_cost
 
 class AnthropicService(LLMService):
-    """Anthropic LLM service implementation."""
+    """Anthropic LLM service implementation using litellm."""
     
     def _setup_client(self) -> None:
         """Set up the Anthropic client."""
         try:
-            self.client = Anthropic(api_key=self.config.api_key)
+            os.environ["ANTHROPIC_API_KEY"] = self.config.api_key
             logger.info("Successfully initialized Anthropic client")
         except Exception as e:
             logger.error(f"Failed to initialize Anthropic client: {str(e)}")
@@ -268,10 +273,10 @@ class AnthropicService(LLMService):
         max_tokens: Optional[int] = None,
         temperature: Optional[float] = None
     ) -> str:
-        """Generate a response using Anthropic's API."""
+        """Generate a response using Anthropic's API via litellm."""
         start_time = time.time()
         try:
-            response = self.client.messages.create(
+            response = completion(
                 model=self.config.model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=temperature or self.config.temperature,
@@ -280,9 +285,9 @@ class AnthropicService(LLMService):
             )
             
             # Calculate metrics
-            prompt_tokens = response.usage.input_tokens
-            completion_tokens = response.usage.output_tokens
-            total_tokens = prompt_tokens + completion_tokens
+            prompt_tokens = response.usage.prompt_tokens
+            completion_tokens = response.usage.completion_tokens
+            total_tokens = response.usage.total_tokens
             latency = time.time() - start_time
             
             # Log metrics
@@ -294,9 +299,9 @@ class AnthropicService(LLMService):
                 success=True
             )
             
-            return response.content[0].text
+            return response.choices[0].message.content
             
-        except anthropic.RateLimitError as e:
+        except litellm.RateLimitError as e:
             self._log_metrics(
                 prompt_tokens=0,
                 completion_tokens=0,
@@ -318,14 +323,9 @@ class AnthropicService(LLMService):
             raise
     
     def count_tokens(self, text: str) -> int:
-        """Count tokens using Anthropic's tokenizer."""
+        """Count tokens using litellm's tokenizer."""
         try:
-            response = self.client.messages.create(
-                model=self.config.model,
-                messages=[{"role": "user", "content": text}],
-                max_tokens=1
-            )
-            return response.usage.input_tokens
+            return litellm.token_counter(model=self.config.model, text=text)
         except Exception as e:
             logger.error(f"Error counting tokens: {str(e)}")
             raise
@@ -358,9 +358,9 @@ class AnthropicService(LLMService):
         """Calculate the cost of the request."""
         # Anthropic's pricing per 1K tokens (as of 2024)
         PRICING = {
-            "claude-3-opus": {"prompt": 0.015, "completion": 0.075},
-            "claude-3-sonnet": {"prompt": 0.003, "completion": 0.015},
-            "claude-3-haiku": {"prompt": 0.00025, "completion": 0.00125}
+            "claude-3-opus-20240229": {"prompt": 0.015, "completion": 0.075},
+            "claude-3-sonnet-20240229": {"prompt": 0.003, "completion": 0.015},
+            "claude-3-haiku-20240307": {"prompt": 0.00025, "completion": 0.00125}
         }
         
         model = self.config.model
@@ -521,15 +521,15 @@ class LLMServiceManager:
             self.config = {
                 ProviderType.OPENAI: ProviderConfig(
                     api_key=secrets["api_keys"]["openai"],
-                    model=secrets.get("models", {}).get("openai", "gpt-3.5-turbo")
+                    model=MODEL_MAPPINGS.get(secrets.get("models", {}).get("openai", "gpt-4-turbo-preview"))
                 ),
                 ProviderType.ANTHROPIC: ProviderConfig(
                     api_key=secrets["api_keys"]["anthropic"],
-                    model=secrets.get("models", {}).get("anthropic", "claude-3-sonnet")
+                    model=MODEL_MAPPINGS.get(secrets.get("models", {}).get("anthropic", "claude-3-sonnet-20240229"))
                 ),
                 ProviderType.DEEPSEEK: ProviderConfig(
                     api_key=secrets["api_keys"]["fireworks"],
-                    model=secrets.get("models", {}).get("deepseek", "deepseek-chat")
+                    model=MODEL_MAPPINGS.get(secrets.get("models", {}).get("deepseek", "deepseek-chat"))
                 )
             }
         except Exception as e:
@@ -538,15 +538,15 @@ class LLMServiceManager:
             self.config = {
                 ProviderType.OPENAI: ProviderConfig(
                     api_key=os.getenv("OPENAI_API_KEY", ""),
-                    model=os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
+                    model=MODEL_MAPPINGS.get(os.getenv("OPENAI_MODEL", "gpt-4-turbo-preview"))
                 ),
                 ProviderType.ANTHROPIC: ProviderConfig(
                     api_key=os.getenv("ANTHROPIC_API_KEY", ""),
-                    model=os.getenv("ANTHROPIC_MODEL", "claude-3-sonnet")
+                    model=MODEL_MAPPINGS.get(os.getenv("ANTHROPIC_MODEL", "claude-3-sonnet-20240229"))
                 ),
                 ProviderType.DEEPSEEK: ProviderConfig(
                     api_key=os.getenv("FIREWORKS_API_KEY", ""),
-                    model=os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
+                    model=MODEL_MAPPINGS.get(os.getenv("DEEPSEEK_MODEL", "deepseek-chat"))
                 )
             }
     
