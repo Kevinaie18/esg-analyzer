@@ -38,11 +38,7 @@ setup(
             "mypy>=1.8.0",
         ],
         "llm": [
-            "openai>=1.12.0",
-            "anthropic>=0.18.1",
-            "litellm>=1.37.19",
-            "instructor>=1.3.7",
-            "fireworks-ai>=0.16.1",
+            "litellm>=1.30.7",
         ],
         "pdf": [
             "PyPDF2>=3.0.1",

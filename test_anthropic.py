@@ -4,32 +4,24 @@ Test script for Anthropic API functionality.
 
 import os
 from loguru import logger
-from engine.llm_service import AnthropicService, load_secrets
+from engine.llm_service import get_llm_manager, ProviderType
 
 def test_anthropic_api():
     """Test Anthropic API connection and response generation."""
-    # Load secrets
-    secrets = load_secrets()
-    
-    # Check API key
-    api_key = secrets["api_keys"]["anthropic"]
-    if not api_key:
-        logger.error("Anthropic API key not found in secrets.toml")
-        return False
-        
     try:
-        # Initialize service
-        service = AnthropicService(
-            model="claude-3-sonnet-20240229",
-            temperature=0.7
-        )
+        # Get LLM manager
+        llm_manager = get_llm_manager()
         
         # Test prompt
         test_prompt = "Please provide a brief ESG analysis for a solar energy company in Kenya."
         
         # Generate response
         logger.info("Sending test request to Anthropic API...")
-        response = service.generate_response(test_prompt, max_tokens=500)
+        response = llm_manager.generate_response(
+            prompt=test_prompt,
+            primary_provider=ProviderType.ANTHROPIC,
+            max_tokens=500
+        )
         
         # Check response
         if response and len(response) > 0:
