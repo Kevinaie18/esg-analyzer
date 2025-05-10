@@ -81,34 +81,106 @@ def parse_kpis(section: str) -> List[Dict]:
 
 def parse_llm_report(text: str, company_name: str) -> dict:
     """Parse the LLM output into the structure expected by DocxFormatter."""
-    analysis = {"company_name": company_name}
-    # Executive Summary
-    analysis["executive_summary"] = parse_section(text, "Executive Summary")
-    # Business Activities
-    ba_section = parse_section(text, "Business Activities Breakdown")
-    analysis["business_activities"] = parse_table_section(
-        ba_section, ["Activity", "Revenue Share", "Key ESG Factors", "Impact Alignment"]
-    )
-    # Environmental Analysis
-    analysis["environmental_analysis"] = parse_section(text, "Environmental Analysis")
-    # Climate Impact
-    climate_section = parse_section(text, "Climate Impact Assessment")
-    analysis["climate_impact"] = parse_climate_impact(climate_section)
-    # Social Analysis
-    analysis["social_analysis"] = parse_section(text, "Social Analysis")
-    # Governance Analysis
-    analysis["governance_analysis"] = parse_section(text, "Governance Analysis")
-    # Impact Thesis Alignment
-    impact_section = parse_section(text, "Impact Thesis Alignment")
-    analysis["impact_alignment"] = parse_impact_alignment(impact_section)
-    # Recommendations
-    rec_section = parse_section(text, "Recommendations")
-    dd_section = parse_section(rec_section, "Priority Due Diligence Actions")
-    esg_section = parse_section(rec_section, "Suggested ESG Clauses")
-    kpi_section = parse_section(rec_section, "Key Performance Indicators")
-    analysis["recommendations"] = {
-        "due_diligence": parse_list_section(dd_section),
-        "esg_clauses": parse_list_section(esg_section),
-        "kpis": parse_kpis(kpi_section)
+    # Initialize with default values
+    analysis = {
+        "company_name": company_name,
+        "executive_summary": "",
+        "business_activities": [],
+        "environmental_analysis": "",
+        "climate_impact": {
+            "climate_solutions": "Not specified",
+            "vulnerability": "Not specified",
+            "adaptation": "Not specified",
+            "carbon_footprint": "Not specified",
+            "decoupling": "Not specified"
+        },
+        "social_analysis": "",
+        "governance_analysis": "",
+        "impact_alignment": {
+            "local_entrepreneurship": "Not specified",
+            "decent_jobs": "Not specified",
+            "climate_action": "Not specified",
+            "gender_empowerment": "Not specified",
+            "resilience": "Not specified",
+            "overall_impact": "Not specified"
+        },
+        "recommendations": {
+            "due_diligence": [],
+            "esg_clauses": [],
+            "kpis": []
+        }
     }
+
+    try:
+        # Executive Summary
+        summary = parse_section(text, "Executive Summary")
+        if summary:
+            analysis["executive_summary"] = summary
+
+        # Business Activities
+        ba_section = parse_section(text, "Business Activities Breakdown")
+        if ba_section:
+            activities = parse_table_section(
+                ba_section, ["Activity", "Revenue Share", "Key ESG Factors", "Impact Alignment"]
+            )
+            if activities:
+                analysis["business_activities"] = activities
+
+        # Environmental Analysis
+        env_analysis = parse_section(text, "Environmental Analysis")
+        if env_analysis:
+            analysis["environmental_analysis"] = env_analysis
+
+        # Climate Impact
+        climate_section = parse_section(text, "Climate Impact Assessment")
+        if climate_section:
+            climate_impact = parse_climate_impact(climate_section)
+            if climate_impact:
+                analysis["climate_impact"].update(climate_impact)
+
+        # Social Analysis
+        social_analysis = parse_section(text, "Social Analysis")
+        if social_analysis:
+            analysis["social_analysis"] = social_analysis
+
+        # Governance Analysis
+        gov_analysis = parse_section(text, "Governance Analysis")
+        if gov_analysis:
+            analysis["governance_analysis"] = gov_analysis
+
+        # Impact Thesis Alignment
+        impact_section = parse_section(text, "Impact Thesis Alignment")
+        if impact_section:
+            impact_alignment = parse_impact_alignment(impact_section)
+            if impact_alignment:
+                analysis["impact_alignment"].update(impact_alignment)
+
+        # Recommendations
+        rec_section = parse_section(text, "Recommendations")
+        if rec_section:
+            # Due Diligence Actions
+            dd_section = parse_section(rec_section, "Priority Due Diligence Actions")
+            if dd_section:
+                dd_actions = parse_list_section(dd_section)
+                if dd_actions:
+                    analysis["recommendations"]["due_diligence"] = dd_actions
+
+            # ESG Clauses
+            esg_section = parse_section(rec_section, "Suggested ESG Clauses")
+            if esg_section:
+                esg_clauses = parse_list_section(esg_section)
+                if esg_clauses:
+                    analysis["recommendations"]["esg_clauses"] = esg_clauses
+
+            # KPIs
+            kpi_section = parse_section(rec_section, "Key Performance Indicators")
+            if kpi_section:
+                kpis = parse_kpis(kpi_section)
+                if kpis:
+                    analysis["recommendations"]["kpis"] = kpis
+
+    except Exception as e:
+        print(f"Warning: Error parsing LLM response: {str(e)}")
+        # Return the analysis with default values if parsing fails
+
     return analysis 

@@ -1,3 +1,6 @@
+# Secrets
+secrets.toml
+
 # Python
 __pycache__/
 *.py[cod]
@@ -41,10 +44,13 @@ env/
 # Logs
 *.log
 logs/
+log/
 
 # Cache
 .cache/
-__pycache__/
+.pytest_cache/
+.coverage
+htmlcov/
 
 # OS
 .DS_Store
