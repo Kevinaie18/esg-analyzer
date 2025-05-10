@@ -5,21 +5,35 @@ import os
 import PyPDF2
 from typing import Dict, List, Optional
 import re
+from loguru import logger
 
 class EHSProcessor:
     def __init__(self, ehs_dir: str = "ifc-ehs"):
         self.ehs_dir = ehs_dir
+        if not os.path.exists(self.ehs_dir):
+            logger.warning(f"Le dossier {self.ehs_dir} n'existe pas. Création du dossier...")
+            os.makedirs(self.ehs_dir, exist_ok=True)
+            logger.info(f"Le dossier {self.ehs_dir} a été créé. Veuillez y placer les fichiers PDF des directives EHS.")
+        
         self.ehs_files = self._get_ehs_files()
         self.sector_mapping = self._create_sector_mapping()
         
     def _get_ehs_files(self) -> Dict[str, str]:
         """Récupère la liste des fichiers EHS disponibles."""
         files = {}
+        if not os.path.exists(self.ehs_dir):
+            logger.error(f"Le dossier {self.ehs_dir} n'existe pas.")
+            return files
+            
         for file in os.listdir(self.ehs_dir):
             if file.endswith('.pdf'):
                 # Extraire le secteur du nom de fichier
                 sector = file.replace('-ehs-guidelines-en.pdf', '').replace('2007-', '').replace('2015-', '').replace('2016-', '').replace('2017-', '')
                 files[sector] = os.path.join(self.ehs_dir, file)
+        
+        if not files:
+            logger.warning(f"Aucun fichier PDF trouvé dans le dossier {self.ehs_dir}")
+            
         return files
     
     def _create_sector_mapping(self) -> Dict[str, List[str]]:
@@ -56,12 +70,16 @@ class EHSProcessor:
                 for page in reader.pages:
                     text += page.extract_text() + "\n"
         except Exception as e:
-            print(f"Error processing {pdf_path}: {str(e)}")
+            logger.error(f"Erreur lors du traitement de {pdf_path}: {str(e)}")
         return text
     
     def get_relevant_ehs_guidelines(self, sector: str, subsector: Optional[str] = None) -> List[str]:
         """Récupère les directives EHS pertinentes pour un secteur donné."""
         relevant_files = []
+        
+        if not self.ehs_files:
+            logger.warning("Aucun fichier EHS disponible")
+            return relevant_files
         
         # Vérifier le secteur principal
         if sector in self.sector_mapping:
@@ -118,6 +136,10 @@ class EHSProcessor:
             'health': [],
             'safety': []
         }
+        
+        if not relevant_files:
+            logger.warning(f"Aucune directive EHS trouvée pour le secteur {sector}")
+            return all_recommendations
         
         for file_path in relevant_files:
             file_recommendations = self.extract_key_recommendations(file_path)

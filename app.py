@@ -161,11 +161,21 @@ st.subheader("3. Recommandations EHS Sectorielles")
 ehs_processor = EHSProcessor()
 recommendations = ehs_processor.get_sector_recommendations(sector, subsector)
 
-for category, recs in recommendations.items():
-    if recs:
-        with st.expander(f"Recommandations {category.capitalize()}"):
-            for rec in recs:
-                st.markdown(f"- {rec}")
+if not any(recommendations.values()):
+    st.warning("""
+    ⚠️ Aucune directive EHS n'est disponible pour le moment.
+    
+    Pour activer les recommandations EHS sectorielles :
+    1. Créez un dossier `ifc-ehs` à la racine du projet
+    2. Placez-y les fichiers PDF des directives EHS IFC
+    3. Redémarrez l'application
+    """)
+else:
+    for category, recs in recommendations.items():
+        if recs:
+            with st.expander(f"Recommandations {category.capitalize()}"):
+                for rec in recs:
+                    st.markdown(f"- {rec}")
 
 with st.form("company_info_form"):
     st.subheader("Company Information")
