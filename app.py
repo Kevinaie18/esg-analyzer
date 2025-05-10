@@ -24,6 +24,7 @@ from utils.ehs_processor import EHSProcessor
 import json
 from formatters.docx_formatter import DocxFormatter
 from utils.llm_report_parser import parse_llm_report
+from engine.llm_service import ProviderType
 
 # Load environment variables
 load_dotenv()
@@ -101,7 +102,7 @@ st.markdown("""
 st.subheader("Analysis Parameters")
 
 if 'llm_provider' not in st.session_state:
-    st.session_state.llm_provider = "OpenAI"
+    st.session_state.llm_provider = "openai"
 if 'llm_model' not in st.session_state:
     st.session_state.llm_model = "gpt-4-turbo-preview"
 if 'max_tokens' not in st.session_state:
@@ -111,8 +112,8 @@ if 'temperature' not in st.session_state:
 
 llm_provider = st.selectbox(
     "Select LLM Provider",
-    ["OpenAI", "Anthropic", "DeepSeek"],
-    index=["OpenAI", "Anthropic", "DeepSeek"].index(st.session_state.llm_provider),
+    ["openai", "anthropic", "deepseek"],
+    index=["openai", "anthropic", "deepseek"].index(st.session_state.llm_provider.lower()),
     key="llm_provider_select"
 )
 
@@ -140,18 +141,18 @@ with col2:
 st.session_state.temperature = temperature
 st.session_state.max_tokens = max_tokens
 
-if llm_provider == "OpenAI":
+if llm_provider == "openai":
     model_options = ["gpt-4-turbo-preview", "gpt-4", "gpt-3.5-turbo"]
     model_key = "openai_model"
-elif llm_provider == "Anthropic":
+elif llm_provider == "anthropic":
     model_options = ["claude-3-opus-20240229", "claude-3-sonnet-20240229", "claude-3-haiku-20240307"]
     model_key = "anthropic_model"
 else:
-    model_options = ["accounts/fireworks/models/deepseek-r1-basic"]
+    model_options = ["deepseek-chat"]
     model_key = "deepseek_model"
 
 llm_model = st.selectbox(
-    f"Select {llm_provider} Model",
+    f"Select {llm_provider.title()} Model",
     model_options,
     index=0,
     key=model_key
@@ -232,7 +233,7 @@ if submitted:
                 try:
                     response = llm_manager.generate_response(
                         prompt=prompt,
-                        primary_provider=st.session_state.llm_provider.upper(),
+                        primary_provider=ProviderType(st.session_state.llm_provider.lower()),
                         max_tokens=st.session_state.max_tokens,
                         temperature=st.session_state.temperature
                     )

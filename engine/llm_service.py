@@ -58,17 +58,17 @@ class ProviderType(Enum):
 
 # Model name mappings
 MODEL_MAPPINGS = {
+    # OpenAI models
     "gpt-4-turbo-preview": "gpt-4-turbo-preview",
     "gpt-4": "gpt-4",
     "gpt-3.5-turbo": "gpt-3.5-turbo",
+    # Anthropic models
     "claude-3-opus-20240229": "anthropic/claude-3-opus-20240229",
-    "anthropic/claude-3-opus-20240229": "anthropic/claude-3-opus-20240229",
     "claude-3-sonnet-20240229": "anthropic/claude-3-sonnet-20240229",
-    "anthropic/claude-3-sonnet-20240229": "anthropic/claude-3-sonnet-20240229",
     "claude-3-haiku-20240307": "anthropic/claude-3-haiku-20240307",
-    "anthropic/claude-3-haiku-20240307": "anthropic/claude-3-haiku-20240307",
-    "accounts/fireworks/models/deepseek-r1-basic": "fireworks_ai/accounts/fireworks/models/deepseek-r1-basic",
-    "fireworks_ai/accounts/fireworks/models/deepseek-r1-basic": "fireworks_ai/accounts/fireworks/models/deepseek-r1-basic"
+    # DeepSeek models
+    "deepseek-chat": "fireworks_ai/accounts/fireworks/models/deepseek-r1-basic",
+    "accounts/fireworks/models/deepseek-r1-basic": "fireworks_ai/accounts/fireworks/models/deepseek-r1-basic"
 }
 
 @dataclass
@@ -497,59 +497,61 @@ class LLMServiceManager:
     """Manager class for handling multiple LLM providers with fallback support."""
     
     def __init__(self):
+        self.providers: Dict[ProviderType, LLMService] = {}
         self._load_config()
         self._initialize_providers()
     
     def _load_config(self) -> None:
-        """Load configuration from Streamlit secrets or environment variables."""
-        try:
-            # Try to load from Streamlit secrets first
-            secrets = st.secrets
-            def resolve_model(key, default):
-                model_name = secrets.get("models", {}).get(key, default)
-                return MODEL_MAPPINGS.get(model_name, model_name)
-            self.config = {
-                ProviderType.OPENAI: ProviderConfig(
-                    api_key=secrets["api_keys"]["openai"],
-                    model=resolve_model("openai", "gpt-4-turbo-preview")
-                ),
-                ProviderType.ANTHROPIC: ProviderConfig(
-                    api_key=secrets["api_keys"]["anthropic"],
-                    model=resolve_model("anthropic", "anthropic/claude-3-sonnet-20240229")
-                ),
-                ProviderType.DEEPSEEK: ProviderConfig(
-                    api_key=secrets["api_keys"]["fireworks"],
-                    model=resolve_model("deepseek", "fireworks_ai/accounts/fireworks/models/deepseek-r1-basic")
-                )
-            }
-        except Exception as e:
-            logger.error(f"Error loading Streamlit secrets: {str(e)}")
-            # Fallback to environment variables
-            def resolve_env_model(env_key, default):
-                model_name = os.getenv(env_key, default)
-                return MODEL_MAPPINGS.get(model_name, model_name)
-            self.config = {
-                ProviderType.OPENAI: ProviderConfig(
-                    api_key=os.getenv("OPENAI_API_KEY", ""),
-                    model=resolve_env_model("OPENAI_MODEL", "gpt-4-turbo-preview")
-                ),
-                ProviderType.ANTHROPIC: ProviderConfig(
-                    api_key=os.getenv("ANTHROPIC_API_KEY", ""),
-                    model=resolve_env_model("ANTHROPIC_MODEL", "anthropic/claude-3-sonnet-20240229")
-                ),
-                ProviderType.DEEPSEEK: ProviderConfig(
-                    api_key=os.getenv("FIREWORKS_API_KEY", ""),
-                    model=resolve_env_model("DEEPSEEK_MODEL", "fireworks_ai/accounts/fireworks/models/deepseek-r1-basic")
-                )
-            }
+        """Load configuration from environment variables and Streamlit secrets."""
+        def resolve_model(key: str, default: str) -> str:
+            """Resolve model name from environment or secrets."""
+            # Try environment variable first
+            env_model = os.getenv(f"{key.upper()}_MODEL")
+            if env_model:
+                return env_model
+            
+            # Try Streamlit secrets
+            try:
+                if st.secrets.get("models", {}).get(key.lower()):
+                    return st.secrets["models"][key.lower()]
+            except Exception:
+                pass
+            
+            return default
+        
+        def resolve_env_model(env_key: str, default: str) -> str:
+            """Resolve model name from environment variable."""
+            return os.getenv(env_key, default)
+        
+        # Load API keys
+        self.api_keys = {
+            ProviderType.OPENAI: os.getenv("OPENAI_API_KEY"),
+            ProviderType.ANTHROPIC: os.getenv("ANTHROPIC_API_KEY"),
+            ProviderType.DEEPSEEK: os.getenv("FIREWORKS_API_KEY")
+        }
+        
+        # Load model names
+        self.models = {
+            ProviderType.OPENAI: resolve_model("openai", "gpt-4-turbo-preview"),
+            ProviderType.ANTHROPIC: resolve_model("anthropic", "claude-3-opus-20240229"),
+            ProviderType.DEEPSEEK: resolve_model("deepseek", "deepseek-chat")
+        }
     
     def _initialize_providers(self) -> None:
-        """Initialize provider instances."""
-        self.providers = {
-            ProviderType.OPENAI: OpenAIService(self.config[ProviderType.OPENAI]),
-            ProviderType.ANTHROPIC: AnthropicService(self.config[ProviderType.ANTHROPIC]),
-            ProviderType.DEEPSEEK: DeepSeekService(self.config[ProviderType.DEEPSEEK])
-        }
+        """Initialize LLM providers."""
+        for provider_type in ProviderType:
+            if self.api_keys[provider_type]:
+                config = ProviderConfig(
+                    api_key=self.api_keys[provider_type],
+                    model=self.models[provider_type]
+                )
+                
+                if provider_type == ProviderType.OPENAI:
+                    self.providers[provider_type] = OpenAIService(config)
+                elif provider_type == ProviderType.ANTHROPIC:
+                    self.providers[provider_type] = AnthropicService(config)
+                elif provider_type == ProviderType.DEEPSEEK:
+                    self.providers[provider_type] = DeepSeekService(config)
     
     def generate_response(
         self,
@@ -559,54 +561,33 @@ class LLMServiceManager:
         max_tokens: Optional[int] = None,
         temperature: Optional[float] = None
     ) -> str:
-        """
-        Generate a response using the specified provider with fallback support.
+        """Generate a response using the specified provider with fallback options."""
+        providers_to_try = [primary_provider]
+        if fallback_providers:
+            providers_to_try.extend(fallback_providers)
         
-        Args:
-            prompt: The prompt to send to the LLM
-            primary_provider: The primary provider to use
-            fallback_providers: List of providers to try if primary fails
-            max_tokens: Maximum tokens in the response
-            temperature: Temperature for generation
+        last_error = None
+        for provider in providers_to_try:
+            if provider not in self.providers:
+                logger.warning(f"Provider {provider.value} not initialized, skipping...")
+                continue
             
-        Returns:
-            The generated response
-            
-        Raises:
-            ProviderError: If all providers fail
-        """
-        if fallback_providers is None:
-            fallback_providers = [
-                ProviderType.ANTHROPIC,
-                ProviderType.DEEPSEEK
-            ]
+            try:
+                return self.providers[provider].generate_response(
+                    prompt=prompt,
+                    max_tokens=max_tokens,
+                    temperature=temperature
+                )
+            except Exception as e:
+                last_error = e
+                logger.error(f"Error with {provider.value}: {str(e)}")
+                continue
         
-        # Try primary provider first
-        try:
-            return self.providers[primary_provider].generate_response(
-                prompt,
-                max_tokens=max_tokens,
-                temperature=temperature
-            )
-        except ProviderError as e:
-            logger.warning(f"Primary provider {primary_provider} failed: {str(e)}")
-            
-            # Try fallback providers
-            for provider in fallback_providers:
-                try:
-                    return self.providers[provider].generate_response(
-                        prompt,
-                        max_tokens=max_tokens,
-                        temperature=temperature
-                    )
-                except ProviderError as e:
-                    logger.warning(f"Fallback provider {provider} failed: {str(e)}")
-                    continue
-            
-            # If all providers fail
-            raise ProviderError("All providers failed to generate a response")
+        if last_error:
+            raise last_error
+        raise ProviderError("No available providers to handle the request")
 
-# Create a singleton instance for Streamlit
+@lru_cache()
 def get_llm_manager() -> LLMServiceManager:
-    """Get the singleton LLM service manager instance."""
+    """Get or create the LLM service manager instance."""
     return LLMServiceManager() 
