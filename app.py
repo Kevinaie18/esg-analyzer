@@ -104,6 +104,10 @@ if 'llm_provider' not in st.session_state:
     st.session_state.llm_provider = "OpenAI"
 if 'llm_model' not in st.session_state:
     st.session_state.llm_model = "gpt-4-turbo-preview"
+if 'max_tokens' not in st.session_state:
+    st.session_state.max_tokens = 4000
+if 'temperature' not in st.session_state:
+    st.session_state.temperature = 0.7
 
 llm_provider = st.selectbox(
     "Select LLM Provider",
@@ -111,6 +115,30 @@ llm_provider = st.selectbox(
     index=["OpenAI", "Anthropic", "DeepSeek"].index(st.session_state.llm_provider),
     key="llm_provider_select"
 )
+
+# Add temperature and max_tokens controls
+col1, col2 = st.columns(2)
+with col1:
+    temperature = st.slider(
+        "Temperature",
+        min_value=0.0,
+        max_value=1.0,
+        value=st.session_state.temperature,
+        step=0.1,
+        help="Higher values make the output more creative but less focused"
+    )
+with col2:
+    max_tokens = st.number_input(
+        "Max Tokens",
+        min_value=100,
+        max_value=16000,
+        value=st.session_state.max_tokens,
+        step=100,
+        help="Maximum length of the generated response"
+    )
+
+st.session_state.temperature = temperature
+st.session_state.max_tokens = max_tokens
 
 if llm_provider == "OpenAI":
     model_options = ["gpt-4-turbo-preview", "gpt-4", "gpt-3.5-turbo"]
@@ -180,6 +208,9 @@ if submitted:
     else:
         try:
             with st.spinner("Generating analysis..."):
+                logger.info(f"Starting analysis generation for {company_name}")
+                logger.info(f"Using provider: {st.session_state.llm_provider}, model: {st.session_state.llm_model}")
+                
                 llm_manager = get_llm_manager()
                 company_info = {
                     "name": company_name,
@@ -189,17 +220,27 @@ if submitted:
                     "description": description,
                     "size": size if size else None
                 }
+                
+                logger.info("Generating analysis prompt...")
                 prompt = prompt_manager.generate_analysis_prompt(
                     company_info=company_info,
                     selected_frameworks=frameworks,
                     detail_level=detail_level
                 )
-                response = llm_manager.generate_response(
-                    prompt=prompt,
-                    primary_provider=st.session_state.llm_provider.upper(),
-                    max_tokens=st.session_state.max_tokens,
-                    temperature=st.session_state.temperature
-                )
+                
+                logger.info("Sending request to LLM...")
+                try:
+                    response = llm_manager.generate_response(
+                        prompt=prompt,
+                        primary_provider=st.session_state.llm_provider.upper(),
+                        max_tokens=st.session_state.max_tokens,
+                        temperature=st.session_state.temperature
+                    )
+                    logger.info("Successfully received response from LLM")
+                except Exception as llm_error:
+                    logger.error(f"LLM request failed: {str(llm_error)}")
+                    st.error(f"Error communicating with LLM service: {str(llm_error)}")
+                    raise
                 
                 # Display the analysis results
                 st.markdown("## Analysis Results")
