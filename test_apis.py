@@ -4,7 +4,7 @@ Test script to verify LLM API connections.
 
 import os
 from dotenv import load_dotenv
-from engine.llm_service import get_llm_service
+from engine.llm_service import get_llm_manager, ProviderType
 from loguru import logger
 import toml
 
@@ -26,8 +26,13 @@ def test_api(provider: str, model: str) -> bool:
     """Test a specific LLM API."""
     try:
         logger.info(f"Testing {provider} API with model {model}...")
-        service = get_llm_service(provider, model)
-        response = service.generate_response("Hello, this is a test message. Please respond with 'API test successful'.")
+        # Initialize LLM service
+        llm_manager = get_llm_manager()
+        response = llm_manager.generate_response(
+            prompt="Hello, this is a test message. Please respond with 'API test successful'.",
+            primary_provider=ProviderType[provider.upper()],
+            max_tokens=1000
+        )
         logger.success(f"{provider} API test successful!")
         logger.info(f"Response: {response}")
         return True

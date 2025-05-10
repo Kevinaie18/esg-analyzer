@@ -12,7 +12,7 @@ import io
 
 from standards.loader import StandardsLoader
 from prompts.enhanced_prompts import EnhancedPromptManager
-from engine.llm_service import get_llm_service
+from engine.llm_service import get_llm_manager
 from config.risk_classification import (
     RISK_CATEGORIES,
     SECTOR_RISK_MAPPING,
@@ -180,11 +180,7 @@ if submitted:
     else:
         try:
             with st.spinner("Generating analysis..."):
-                llm_service = get_llm_service(
-                    provider=st.session_state.llm_provider.lower(),
-                    model=st.session_state.llm_model,
-                    temperature=config["llm"]["temperature"]
-                )
+                llm_manager = get_llm_manager()
                 company_info = {
                     "name": company_name,
                     "country": country,
@@ -198,9 +194,11 @@ if submitted:
                     selected_frameworks=frameworks,
                     detail_level=detail_level
                 )
-                response = llm_service.generate_response(
-                    prompt,
-                    max_tokens=config["llm"]["max_tokens"]
+                response = llm_manager.generate_response(
+                    prompt=prompt,
+                    primary_provider=st.session_state.llm_provider.upper(),
+                    max_tokens=st.session_state.max_tokens,
+                    temperature=st.session_state.temperature
                 )
                 
                 # Display the analysis results
